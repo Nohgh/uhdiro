@@ -1,0 +1,190 @@
+{
+  "buildings": [
+    {
+      "buildingId": 1,
+      "buildingName": "공학관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 2,
+      "buildingName": "대학본부-인문1관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 3,
+      "buildingName": "의학관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 4,
+      "buildingName": "인문2관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 5,
+      "buildingName": "대학본부별관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 6,
+      "buildingName": "실험동물센터",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 7,
+      "buildingName": "자연과학관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 8,
+      "buildingName": "생명과학관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 9,
+      "buildingName": ["Campus Life Center", "clc"],
+      "imgUrl": ".."
+    },
+
+    {
+      "buildingId": 10,
+      "buildingName": "사회경영1관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 11,
+      "buildingName": "일송아트홀",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 12,
+      "buildingName": "창업보육센터",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 13,
+      "buildingName": "사회·경영2관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 14,
+      "buildingName": "국제관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 15,
+      "buildingName": "국제회의관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 16,
+      "buildingName": "기초교육관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 17,
+      "buildingName": "일송기념도서관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 18,
+      "buildingName": "한림레크리에이션센터",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 19,
+      "buildingName": "학군단",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 20,
+      "buildingName": "실내테니스장",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 21,
+      "buildingName": "의료·바이오융합연구원",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 22,
+      "buildingName": "산학협력관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 23,
+      "buildingName": "도헌글로벌스쿨",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 24,
+      "buildingName": "학생생활관 1관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 25,
+      "buildingName": "학생생활관 2관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 26,
+      "buildingName": "학생생활관 3관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 27,
+      "buildingName": "학생생활관 4관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 28,
+      "buildingName": "학생생활관 5관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 29,
+      "buildingName": "학생생활관 6관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 30,
+      "buildingName": "학생생활관 7관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 31,
+      "buildingName": "학생생활관 8관",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 32,
+      "buildingName": "체육 기자재실",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 33,
+      "buildingName": "H Stadium (골프장, 테니스장, 농구장)",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 34,
+      "buildingName": "ILSONG Stadium",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 35,
+      "buildingName": "씨름장",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 36,
+      "buildingName": "온실",
+      "imgUrl": ".."
+    },
+    {
+      "buildingId": 37,
+      "buildingName": "한림대학교 춘천성심병원",
+      "imgUrl": ".."
+    }
+  ]
+}
