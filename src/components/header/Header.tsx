@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Header.scss";
 import building from "../../data/building/building.json";
-import useDebounce from "@hooks/useDebounce";
+import useDebounce from "../../hooks/useDebounce";
 //TODO: 검색 로직 작성
 //입력한 문자가 있는 경우에 x아이콘 생성하여 한번에 없앨 수 있도록
 //1. 숫자, 문자 판별 2.문자길이 판별
@@ -46,22 +46,24 @@ const Header = () => {
     };
   }, []);
 
+  const debounceInputValue = useDebounce(inputValue, 300);
+
   useEffect(() => {
     console.log("입력");
     const handleSearch = () => {
-      if (isNumber(inputValue)) {
-        const find = parseFloat(inputValue);
+      if (isNumber(debounceInputValue)) {
+        const find = parseFloat(debounceInputValue);
         const building = buildingsData.find((b) => b.buildingId === find);
         setFindValue(building || null);
       }
     };
-    if (inputValue) {
+    if (debounceInputValue) {
       handleSearch();
     } else {
       setFindValue(null); // 입력값이 없을 경우 초기화
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue]);
+  }, [debounceInputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
