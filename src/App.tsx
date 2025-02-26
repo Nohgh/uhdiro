@@ -1,13 +1,28 @@
-import "./App.css";
+import { useEffect, useState } from "react";
+import "./App.scss";
 
-function App() {
-  //윈도우 사이즈 개산해서 모바일 사이즈가 아니라면 모바일사이즈로 볼 수 있게
-  //화면 계산
+const App = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      console.log(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  //440이 넘어가면 중앙에 화면을 440으로 고정
   return (
     <>
-      <div>웹</div>
+      <div className="main">
+        <div>현재 화면의 너비는 {windowWidth}</div>
+      </div>
     </>
   );
-}
+};
 
 export default App;
