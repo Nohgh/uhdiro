@@ -5,15 +5,15 @@ const CampusMap = () => {
   useKakaoLoader();
   return (
     <>
-      <Map // 지도를 표시할 Container
+      <Map
         id="map"
         className="map"
         center={{
           // 지도의 중심좌표
-          lat: 37.8839362,
-          lng: 127.7378349,
+          lat: 37.88635830852239,
+          lng: 127.73791244339736,
         }}
-        level={3} // 지도의 확대 레벨
+        level={3}
       />
     </>
   );

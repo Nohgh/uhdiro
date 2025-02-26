@@ -17,10 +17,10 @@ const Header = () => {
   const searchBox = useRef<null | HTMLDivElement>(null);
   const resultArea = useRef<null | HTMLDivElement>(null);
 
-  const [showResultArea, setResultAria] = useState(false);
+  const [showResultArea, setShowResultAria] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [findValue, setFindValue] = useState<Building | null>(null);
-  const [buildingsData, setBuildingsData] = useState<Building[]>([]);
+  const [buildingsData, setBuildingsData] = useState<Building[] | null>([]);
+  const [buildingResult, setBuildingResult] = useState<Building[] | null>(null);
 
   useEffect(() => {
     setBuildingsData(building.buildings);
@@ -33,12 +33,11 @@ const Header = () => {
         (searchBox.current && searchBox.current.contains(target)) ||
         (resultArea.current && resultArea.current.contains(target))
       ) {
-        setResultAria(true);
+        setShowResultAria(true);
       } else {
-        setResultAria(false);
+        setShowResultAria(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutSide);
 
     return () => {
@@ -49,18 +48,27 @@ const Header = () => {
   const debounceInputValue = useDebounce(inputValue, 300);
 
   useEffect(() => {
-    console.log("입력");
+    //탐색을 통해 반환되는 결과는 전역으로 관리되어야 한다. (지도에서 사용)
     const handleSearch = () => {
       if (isNumber(debounceInputValue)) {
-        const find = parseFloat(debounceInputValue);
-        const building = buildingsData.find((b) => b.buildingId === find);
-        setFindValue(building || null);
+        const numberValue = parseFloat(debounceInputValue);
+
+        if (numberValue < 100) {
+          const buildings = buildingsData?.filter((b) =>
+            String(b.buildingId).startsWith(String(numberValue))
+          );
+          if (buildings) setBuildingResult(buildings);
+        } else {
+          console.log("두 자리수 이상입니다. 강의실 찾기 로직을 만들어주세여");
+        }
+      } else {
+        console.log("숫자가 아닌 영어입니다.");
       }
     };
     if (debounceInputValue) {
       handleSearch();
     } else {
-      setFindValue(null); // 입력값이 없을 경우 초기화
+      setBuildingResult(null); // 입력값이 없을 경우 초기화
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
@@ -93,7 +101,7 @@ const Header = () => {
           placeholder="건물 이름 및 번호, 강의실 번호 및 이름 검색"
           value={inputValue}
           onChange={handleInputChange}
-        ></input>
+        />
         <svg
           className="header__search-box__icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +112,22 @@ const Header = () => {
       </div>
       {showResultArea && (
         <div className="search-area" ref={resultArea}>
-          {findValue && <div>{findValue.buildingId}</div>}
+          {buildingResult &&
+            buildingResult.map((rst) => {
+              return (
+                <div>
+                  <div></div>
+                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                  </svg> */}
+                  <div>
+                    <div>{rst.buildingName}</div>
+                    <div>{rst.buildingId}번 건물</div>
+                  </div>
+                  <div></div>
+                </div>
+              );
+            })}
         </div>
       )}
     </div>
