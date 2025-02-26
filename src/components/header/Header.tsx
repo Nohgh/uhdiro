@@ -1,5 +1,33 @@
+import { useEffect, useRef, useState } from "react";
 import "./Header.scss";
+//TODO: 검색 로직 작성
+
 const Header = () => {
+  const searchBox = useRef<null | HTMLDivElement>(null);
+  const resultArea = useRef<null | HTMLDivElement>(null);
+
+  const [showResultArea, setResultAria] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutSide = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        (searchBox.current && searchBox.current.contains(target)) ||
+        (resultArea.current && resultArea.current.contains(target))
+      ) {
+        setResultAria(true);
+      } else {
+        setResultAria(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutSide);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutSide);
+    };
+  }, []);
+
   return (
     <div className="header">
       <div className="header__top">
@@ -12,19 +40,21 @@ const Header = () => {
         </svg>
         <div className="header__top__logo">Udiro</div>
       </div>
-      <div className="header__searchbox">
+      <div className="header__search-box" ref={searchBox}>
         <input
-          className="header__searchbox__input"
+          type="text"
+          className="header__search-box__input"
           placeholder="건물 이름 및 번호, 강의실 번호 및 이름 검색"
         ></input>
         <svg
-          className="header__searchbox__icon"
+          className="header__search-box__icon"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
         >
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         </svg>
       </div>
+      {showResultArea && <div className="search-area" ref={resultArea}></div>}
     </div>
   );
 };
