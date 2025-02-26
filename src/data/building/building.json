@@ -3,7 +3,9 @@
     {
       "buildingId": 1,
       "buildingName": "공학관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "",
+      "lng": ""
     },
     {
       "buildingId": 2,
