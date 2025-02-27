@@ -4,189 +4,261 @@
       "buildingId": 1,
       "buildingName": "공학관",
       "imgUrl": "..",
-      "lat": "",
-      "lng": ""
+      "lat": "37.88635817171518",
+      "lng": "127.73577534095007"
     },
     {
       "buildingId": 2,
       "buildingName": "대학본부-인문1관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886497444880995",
+      "lng": "127.73799340500857"
     },
     {
       "buildingId": 3,
       "buildingName": "의학관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88598871980002",
+      "lng": "127.73722670492006"
     },
     {
       "buildingId": 4,
       "buildingName": "인문2관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886384249233565",
+      "lng": "127.73736705928216"
     },
     {
       "buildingId": 5,
       "buildingName": "대학본부별관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88671795717982",
+      "lng": "127.73874586841292"
     },
     {
       "buildingId": 6,
       "buildingName": "실험동물센터",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886154505918384",
+      "lng": "127.73664861396824"
     },
     {
       "buildingId": 7,
       "buildingName": "자연과학관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.885765992584226",
+      "lng": "127.73682662288928"
     },
     {
       "buildingId": 8,
       "buildingName": "생명과학관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.885213353074974",
+      "lng": "127.73587762317554"
     },
     {
       "buildingId": 9,
       "buildingName": ["Campus Life Center", "clc"],
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88654716077921",
+      "lng": "127.74011963991391"
     },
 
     {
       "buildingId": 10,
       "buildingName": "사회경영1관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88834173717831",
+      "lng": "127.73840968878399"
     },
     {
       "buildingId": 11,
       "buildingName": "일송아트홀",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886891513661595",
+      "lng": "127.73692878000104"
     },
     {
       "buildingId": 12,
       "buildingName": "창업보육센터",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.884844918903404",
+      "lng": "127.73572618136272"
     },
     {
       "buildingId": 13,
       "buildingName": "사회·경영2관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88783796202584",
+      "lng": "127.7382909796829"
     },
     {
       "buildingId": 14,
       "buildingName": "국제관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886740132465356",
+      "lng": "127.74095140742965"
     },
     {
       "buildingId": 15,
       "buildingName": "국제회의관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.884035569209445",
+      "lng": "127.73836668677383"
     },
     {
       "buildingId": 16,
       "buildingName": "기초교육관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.888408077056106",
+      "lng": "127.7378874291621"
     },
     {
       "buildingId": 17,
       "buildingName": "일송기념도서관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88487128219811",
+      "lng": "127.73727240062289"
     },
     {
       "buildingId": 18,
-      "buildingName": "한림레크리에이션센터",
-      "imgUrl": ".."
+      "buildingName": ["한림 레크리에이션센터", "렉센"],
+      "imgUrl": "..",
+      "lat": "37.884583532524125",
+      "lng": "127.73862223857431"
     },
     {
       "buildingId": 19,
       "buildingName": "학군단",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88840952663685",
+      "lng": "127.73909243820314"
     },
     {
       "buildingId": 20,
       "buildingName": "실내테니스장",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88752317493897",
+      "lng": "127.74107293181487"
     },
     {
       "buildingId": 21,
       "buildingName": "의료·바이오융합연구원",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88602197756623",
+      "lng": "127.73767036928022"
     },
     {
       "buildingId": 22,
       "buildingName": "산학협력관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.887299434685225",
+      "lng": "127.73796730665102"
     },
     {
       "buildingId": 23,
       "buildingName": "도헌글로벌스쿨",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88462458731069",
+      "lng": "127.73638329213964"
     },
     {
       "buildingId": 24,
       "buildingName": "학생생활관 1관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.885570144160624",
+      "lng": "127.74075780433913"
     },
     {
       "buildingId": 25,
       "buildingName": "학생생활관 2관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.885944649558965",
+      "lng": "127.7406592487218"
     },
     {
       "buildingId": 26,
       "buildingName": "학생생활관 3관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88594557663717",
+      "lng": "127.74122763265319"
     },
     {
       "buildingId": 27,
       "buildingName": "학생생활관 4관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88627221590976",
+      "lng": "127.74086146191291"
     },
     {
       "buildingId": 28,
       "buildingName": "학생생활관 5관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88638181925518",
+      "lng": "127.74133999761531"
     },
     {
       "buildingId": 29,
       "buildingName": "학생생활관 6관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88614901793587",
+      "lng": "127.74182646705283"
     },
     {
       "buildingId": 30,
       "buildingName": "학생생활관 7관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886668666147784",
+      "lng": "127.74157022567769"
     },
     {
       "buildingId": 31,
       "buildingName": "학생생활관 8관",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88713444047558",
+      "lng": "127.74128502142598"
     },
     {
       "buildingId": 32,
       "buildingName": "체육 기자재실",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88731178345136",
+      "lng": "127.7388711624164"
     },
     {
       "buildingId": 33,
       "buildingName": "H Stadium (골프장, 테니스장, 농구장)",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88797681542429",
+      "lng": "127.73697938444978"
     },
     {
       "buildingId": 34,
-      "buildingName": "ILSONG Stadium",
-      "imgUrl": ".."
+      "buildingName": ["ILSONG Stadium", "운동장"],
+      "imgUrl": "..",
+      "lat": "37.887729231683686",
+      "lng": "127.73982454269684"
     },
     {
       "buildingId": 35,
       "buildingName": "씨름장",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88763735791294",
+      "lng": "127.74082398570037"
     },
     {
       "buildingId": 36,
       "buildingName": "온실",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.886678904962906",
+      "lng": "127.73563075363145"
     },
     {
       "buildingId": 37,
       "buildingName": "한림대학교 춘천성심병원",
-      "imgUrl": ".."
+      "imgUrl": "..",
+      "lat": "37.88411695040569",
+      "lng": "127.73975429935209"
     }
   ]
 }
