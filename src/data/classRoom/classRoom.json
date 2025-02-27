@@ -1172,63 +1172,8 @@
     {
       "buildingId": 11,
       "buildingName": "일송아트홀",
-      "floor": 4,
-      "1f": [
-        { "num": "", "name": "한림대학교 박물관" },
-        { "num": "", "name": "제 1일반열람실" },
-        { "num": "", "name": "제 2일반열람실" },
-        { "num": "", "name": "지식미디어팀 사무실" },
-        { "num": "", "name": "휴게실" },
-        { "num": "", "name": "복사실" },
-        { "num": "", "name": "인문학 연구소" },
-        { "num": "", "name": "박물관 사무실" }
-      ],
-      "2f": [
-        { "num": "", "name": "대출반납 데스크" },
-        { "num": "", "name": "상상공방" },
-        { "num": "", "name": "업무지원실" },
-        { "num": "", "name": "희귀자료실" },
-        { "num": "", "name": "비전관" },
-        { "num": "", "name": "인문 예술학 자료실" },
-        { "num": "17212", "name": "스터디룸" },
-        { "num": "17213", "name": "스터디룸" },
-        { "num": "17214", "name": "스터디룸" },
-        { "num": "17215", "name": "스터디룸" },
-        { "num": "172156", "name": "스터디룸" },
-        { "num": "", "name": "연구원 스터디룸" }
-      ],
-      "3f": [
-        { "num": "", "name": "사회 자연과학자료실" },
-        { "num": "", "name": "업무지원실" },
-        { "num": "", "name": "의학자료실" },
-        { "num": "", "name": "연구원스터디룸" },
-        { "num": "17304", "name": "스터디룸" },
-        { "num": "17305", "name": "스터디룸" },
-        { "num": "17306", "name": "스터디룸" },
-        { "num": "17307", "name": "스터디룸" },
-        { "num": "17308", "name": "스터디룸" },
-        { "num": "17309", "name": "스터디룸" }
-      ],
-      "4f": [
-        { "num": "", "name": "시스템실" },
-        { "num": "", "name": "교육실" },
-        { "num": "", "name": "C.Square" },
-        { "num": "", "name": "씨스퀘어" },
-        { "num": "", "name": "창의융합룸" },
-        { "num": "17405", "name": "스터디룸" },
-        { "num": "17406", "name": "스터디룸" },
-        { "num": "17407", "name": "스터디룸" },
-        { "num": "", "name": "Violet" },
-        { "num": "", "name": "Green" },
-        { "num": "", "name": "Coral Orange" },
-        { "num": "", "name": "Amber Orange" },
-        { "num": "", "name": "Neon Orange" },
-        { "num": "", "name": "Sienna Orange" },
-        { "num": "", "name": "미래 디자인랩 사무실" },
-        { "num": "", "name": "Design Room" },
-        { "num": "", "name": "Yellow" },
-        { "num": "", "name": "Blue" }
-      ]
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
     },
     {
       "buildingId": 12,
@@ -1478,14 +1423,94 @@
     },
     {
       "buildingId": 17,
-      "buildingName": "국제교육관",
-      "floor": 6,
-      "1f": [{ "num": "", "name": "휴게실" }],
-      "2f": [{ "num": "14201", "name": "강의실" }],
-      "3f": [{ "num": "14301", "name": "토익 강사실" }],
-      "4f": [{ "num": "14401", "name": "국제학부 세미나실1" }],
-      "5f": [{ "num": "14501", "name": "한국어 교육센터" }],
-      "6f": [{ "num": "14601", "name": "노은미 교수실" }]
+      "buildingName": "일송창의비전관",
+      "floor": 4,
+      "1f": [
+        { "num": "", "name": "한림대학교 박물관" },
+        { "num": "", "name": "제 1일반열람실" },
+        { "num": "", "name": "제 2일반열람실" },
+        { "num": "", "name": "지식미디어팀 사무실" },
+        { "num": "", "name": "휴게실" },
+        { "num": "", "name": "복사실" },
+        { "num": "", "name": "인문학 연구소" },
+        { "num": "", "name": "박물관 사무실" }
+      ],
+      "2f": [
+        { "num": "", "name": "대출반납 데스크" },
+        { "num": "", "name": "상상공방" },
+        { "num": "", "name": "업무지원실" },
+        { "num": "", "name": "희귀자료실" },
+        { "num": "", "name": "비전관" },
+        { "num": "", "name": "인문 예술학 자료실" },
+        { "num": "17212", "name": "스터디룸" },
+        { "num": "17213", "name": "스터디룸" },
+        { "num": "17214", "name": "스터디룸" },
+        { "num": "17215", "name": "스터디룸" },
+        { "num": "172156", "name": "스터디룸" },
+        { "num": "", "name": "연구원 스터디룸" }
+      ],
+      "3f": [
+        { "num": "", "name": "사회 자연과학자료실" },
+        { "num": "", "name": "업무지원실" },
+        { "num": "", "name": "의학자료실" },
+        { "num": "", "name": "연구원스터디룸" },
+        { "num": "17304", "name": "스터디룸" },
+        { "num": "17305", "name": "스터디룸" },
+        { "num": "17306", "name": "스터디룸" },
+        { "num": "17307", "name": "스터디룸" },
+        { "num": "17308", "name": "스터디룸" },
+        { "num": "17309", "name": "스터디룸" }
+      ],
+      "4f": [
+        { "num": "", "name": "시스템실" },
+        { "num": "", "name": "교육실" },
+        { "num": "", "name": "C.Square" },
+        { "num": "", "name": "씨스퀘어" },
+        { "num": "", "name": "창의융합룸" },
+        { "num": "17405", "name": "스터디룸" },
+        { "num": "17406", "name": "스터디룸" },
+        { "num": "17407", "name": "스터디룸" },
+        { "num": "", "name": "Violet" },
+        { "num": "", "name": "Green" },
+        { "num": "", "name": "Coral Orange" },
+        { "num": "", "name": "Amber Orange" },
+        { "num": "", "name": "Neon Orange" },
+        { "num": "", "name": "Sienna Orange" },
+        { "num": "", "name": "미래 디자인랩 사무실" },
+        { "num": "", "name": "Design Room" },
+        { "num": "", "name": "Yellow" },
+        { "num": "", "name": "Blue" }
+      ]
+    },
+    {
+      "buildingId": 18,
+      "buildingName": "한림레크리에이션센터",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
+    },
+    {
+      "buildingId": 19,
+      "buildingName": "학군단",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "한림대학교 박물관" }]
+    },
+    {
+      "buildingId": 20,
+      "buildingName": "실내테니스장",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
+    },
+    {
+      "buildingId": 21,
+      "buildingName": "한림중개의과학연구원",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
+    },
+    {
+      "buildingId": 22,
+      "buildingName": "산학협력관",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
     }
   ]
 }
