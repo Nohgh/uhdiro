@@ -58,7 +58,7 @@
     },
     {
       "buildingId": 9,
-      "buildingName": ["Campus Life Center", "clc"],
+      "buildingName": ["CLC", "Campus Life Center"],
       "imgUrl": "..",
       "lat": "37.88654716077921",
       "lng": "127.74011963991391"

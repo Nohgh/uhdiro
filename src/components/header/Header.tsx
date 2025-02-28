@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Header.scss";
 import building from "../../data/building/building.json";
 import useDebounce from "../../hooks/useDebounce";
+import useResultBuildingStore from "../../store/useResultBuildingStore";
+import useSearchStateStore from "../../store/useSearchStateStore";
 //TODO: 검색 로직 작성
 //입력한 문자가 있는 경우에 x아이콘 생성하여 한번에 없앨 수 있도록
 //1. 숫자, 문자 판별 2.문자길이 판별
@@ -15,33 +17,32 @@ interface Building {
 
 const Header = () => {
   const searchBox = useRef<null | HTMLDivElement>(null);
-  const resultArea = useRef<null | HTMLDivElement>(null);
 
-  const [showResultArea, setShowResultAria] = useState(false);
+  // const [showPlacePanel, setShowPlacePanel] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [buildingsData, setBuildingsData] = useState<Building[] | null>([]);
-  const [buildingResult, setBuildingResult] = useState<Building[] | null>(null);
+
+  const { setResultClassRoom } = useResultBuildingStore();
+  const { setSearchEmpty, setNotSearchEmpty } = useSearchStateStore();
 
   useEffect(() => {
     setBuildingsData(building.buildings);
   }, []);
 
   useEffect(() => {
-    const handleClickOutSide = (event: MouseEvent) => {
+    const handleClickSearchBox = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (
-        (searchBox.current && searchBox.current.contains(target)) ||
-        (resultArea.current && resultArea.current.contains(target))
-      ) {
-        setShowResultAria(true);
+      if (searchBox.current && searchBox.current.contains(target)) {
+        console.log("");
+        //검색창 클릭 -> 패널 오픈
       } else {
-        setShowResultAria(false);
+        console.log("");
       }
     };
-    document.addEventListener("mousedown", handleClickOutSide);
+    document.addEventListener("mousedown", handleClickSearchBox);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutSide);
+      document.removeEventListener("mousedown", handleClickSearchBox);
     };
   }, []);
 
@@ -53,22 +54,30 @@ const Header = () => {
       if (isNumber(debounceInputValue)) {
         const numberValue = parseFloat(debounceInputValue);
 
+        //건물에 해당하는 입력에 대한 처리
         if (numberValue < 100) {
           const buildings = buildingsData?.filter((b) =>
             String(b.buildingId).startsWith(String(numberValue))
           );
-          if (buildings) setBuildingResult(buildings);
+          if (buildings) setResultClassRoom(buildings);
         } else {
+          //강의실에 해당하는 입력에 대한 처리
           console.log("두 자리수 이상입니다. 강의실 찾기 로직을 만들어주세여");
         }
       } else {
-        console.log("숫자가 아닌 영어입니다.");
+        //문자열에 대한 처리로 건물 또는 강의실로 결과 반환
+        console.log("숫자가 아닌 문자입니다.");
+        //강의실에서 일치하는 값이 나오면 강의실 결과 업데이트
+        //건물에서 일치하는 값이 나오면 건물 결과 업데이트
       }
     };
+
     if (debounceInputValue) {
+      setNotSearchEmpty();
       handleSearch();
     } else {
-      setBuildingResult(null); // 입력값이 없을 경우 초기화
+      setSearchEmpty();
+      console.log("입력값이 없습니다.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
@@ -82,6 +91,8 @@ const Header = () => {
     return !isNaN(parsedValue) && isFinite(parsedValue);
   };
 
+  //검색을 시작하기 전 -> 최근 기록, 저장 기록 보여주기
+  //검색을 시작 -> 결과창
   return (
     <div className="header">
       <div className="header__top">
@@ -110,26 +121,6 @@ const Header = () => {
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         </svg>
       </div>
-      {showResultArea && (
-        <div className="search-area" ref={resultArea}>
-          {buildingResult &&
-            buildingResult.map((rst) => {
-              return (
-                <div>
-                  <div></div>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                  </svg> */}
-                  <div>
-                    <div>{rst.buildingName}</div>
-                    <div>{rst.buildingId}번 건물</div>
-                  </div>
-                  <div></div>
-                </div>
-              );
-            })}
-        </div>
-      )}
     </div>
   );
 };
