@@ -1,29 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./Header.scss";
 import building from "../../data/building/building.json";
+import { Building } from "../../interfaces/place";
 import useDebounce from "../../hooks/useDebounce";
 import useResultBuildingStore from "../../store/useResultBuildingStore";
-import useSearchStateStore from "../../store/useSearchStateStore";
-//TODO: 검색 로직 작성
-//입력한 문자가 있는 경우에 x아이콘 생성하여 한번에 없앨 수 있도록
-//1. 숫자, 문자 판별 2.문자길이 판별
-interface Building {
-  buildingId: number;
-  buildingName: string | string[];
-  imgUrl: string;
-  lat?: string;
-  lng?: string;
-}
+import "./Header.scss";
+import useResultClassRoomStore from "../../store/useResultClassRoomStore";
 
 const Header = () => {
   const searchBox = useRef<null | HTMLDivElement>(null);
+  const placePanel = useRef<null | HTMLDivElement>(null);
 
-  // const [showPlacePanel, setShowPlacePanel] = useState(false);
+  const [showPlacePanel, setShowPlacePanel] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [buildingsData, setBuildingsData] = useState<Building[] | null>([]);
 
-  const { setResultClassRoom } = useResultBuildingStore();
-  const { setSearchEmpty, setNotSearchEmpty } = useSearchStateStore();
+  const [selectResult, setSelectedResult] = useState({
+    selectType: "none",
+    selectData: {},
+  });
+  console.log(selectResult);
+
+  const { resultBuilding, setResultBuilding } = useResultBuildingStore();
+  const { resultClassRoom } = useResultClassRoomStore();
 
   useEffect(() => {
     setBuildingsData(building.buildings);
@@ -32,11 +30,13 @@ const Header = () => {
   useEffect(() => {
     const handleClickSearchBox = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (searchBox.current && searchBox.current.contains(target)) {
-        console.log("");
-        //검색창 클릭 -> 패널 오픈
+      if (
+        !searchBox.current?.contains(target) &&
+        !placePanel.current?.contains(target)
+      ) {
+        setShowPlacePanel(false);
       } else {
-        console.log("");
+        setShowPlacePanel(true);
       }
     };
     document.addEventListener("mousedown", handleClickSearchBox);
@@ -47,7 +47,6 @@ const Header = () => {
   }, []);
 
   const debounceInputValue = useDebounce(inputValue, 300);
-
   useEffect(() => {
     //탐색을 통해 반환되는 결과는 전역으로 관리되어야 한다. (지도에서 사용)
     const handleSearch = () => {
@@ -59,10 +58,11 @@ const Header = () => {
           const buildings = buildingsData?.filter((b) =>
             String(b.buildingId).startsWith(String(numberValue))
           );
-          if (buildings) setResultClassRoom(buildings);
+          if (buildings) setResultBuilding(buildings);
         } else {
           //강의실에 해당하는 입력에 대한 처리
           console.log("두 자리수 이상입니다. 강의실 찾기 로직을 만들어주세여");
+          // setResultClassRoom({});
         }
       } else {
         //문자열에 대한 처리로 건물 또는 강의실로 결과 반환
@@ -73,10 +73,8 @@ const Header = () => {
     };
 
     if (debounceInputValue) {
-      setNotSearchEmpty();
       handleSearch();
     } else {
-      setSearchEmpty();
       console.log("입력값이 없습니다.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,14 +83,69 @@ const Header = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-
   const isNumber = (value: string) => {
     const parsedValue = parseFloat(value);
     return !isNaN(parsedValue) && isFinite(parsedValue);
   };
-
   //검색을 시작하기 전 -> 최근 기록, 저장 기록 보여주기
   //검색을 시작 -> 결과창
+
+  const Places = () => {
+    if (resultBuilding?.length || resultClassRoom?.length) {
+      return (
+        <div>
+          {resultClassRoom?.map((i) => (
+            <div className="resultBlock classRoom" key={i.name}>
+              {i.name}
+            </div>
+          ))}
+          {resultBuilding?.map((building) => (
+            <div
+              className="resultBlock building"
+              key={building.buildingId}
+              onClick={() =>
+                setSelectedResult({
+                  selectType: "building",
+                  selectData: building,
+                })
+              }
+            >
+              {/* 선택한 빌딩과 강의실 정보는 campus map으로 전달되어야 한다.-> 전역 상태 관리 */}
+              <svg
+                className="placeIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+              >
+                <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+              </svg>
+              <div className="building-data">
+                <div className="building-data__name">
+                  {building.buildingName}
+                </div>
+                <div className="building-data__id">
+                  {building.buildingId}번 건물
+                </div>
+              </div>
+              <svg
+                className="moveIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        결과가 검색되지 않았습니다. 결과를 유추하자면 ..곳에 있을 것으로
+        예상됩니다.
+      </div>
+    );
+  };
   return (
     <div className="header">
       <div className="header__top">
@@ -121,6 +174,17 @@ const Header = () => {
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         </svg>
       </div>
+      {showPlacePanel && (
+        <div className="place-panel" ref={placePanel}>
+          {inputValue ? (
+            <div className="place-panel-resultTab">{Places()}</div>
+          ) : (
+            <div className="place-panel-savedTab">
+              최근 기록과 저장된 내 장소가 나옵니다.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

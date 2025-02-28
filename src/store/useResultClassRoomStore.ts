@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { ClassRoom } from "../interfaces/place";
 
 interface ClassRoomState {
-  resultClassRoom: ClassRoom | null;
-  setResultClassRoom: (classRoom: ClassRoom) => void;
+  resultClassRoom: ClassRoom[] | null;
+  setResultClassRoom: (classRoom: ClassRoom[]) => void;
   clearResultClassRoom: () => void;
 }
 
