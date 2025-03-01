@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { Building, ClassRoom } from "../interfaces/place";
+import { BuildingResult, ClassRoomResult } from "../interfaces/place";
 
-type SelectedType = Building | ClassRoom;
+type SelectedType = BuildingResult | ClassRoomResult;
 
 const useSelectedDataStore = create((set) => ({
   selectedType: "",

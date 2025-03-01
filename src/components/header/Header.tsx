@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import building from "../../data/building/building.json";
-import { Building } from "../../interfaces/place";
+import classRoom from "../../data/classRoom/classRoom.json";
+import {
+  BuildingResult,
+  ClassRoomResult,
+  ClassRoomData,
+  ClassRoom,
+  Room,
+} from "../../interfaces/place";
 import useDebounce from "../../hooks/useDebounce";
 import useResultBuildingStore from "../../store/useResultBuildingStore";
 import "./Header.scss";
@@ -12,16 +20,19 @@ const Header = () => {
 
   const [showPlacePanel, setShowPlacePanel] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [buildingsData, setBuildingsData] = useState<Building[] | null>([]);
+  const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
+    []
+  );
 
   const [selectResult, setSelectedResult] = useState({
     selectType: "none",
     selectData: {},
   });
-  console.log(selectResult);
+  console.log("selectResult", selectResult);
 
   const { resultBuilding, setResultBuilding } = useResultBuildingStore();
-  const { resultClassRoom } = useResultClassRoomStore();
+  const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
+    useResultClassRoomStore();
 
   useEffect(() => {
     setBuildingsData(building.buildings);
@@ -46,57 +57,125 @@ const Header = () => {
     };
   }, []);
 
+  function findClassrooms(
+    data: ClassRoomData,
+    searchValue: string
+  ): ClassRoomResult[] {
+    const result: ClassRoomResult[] = [];
+    // console.log("findClassrooms");
+    function searchInFloor(
+      floorData: Room[],
+      building: ClassRoom,
+      floorLevel: number
+    ): void {
+      floorData.forEach((room: Room) => {
+        if (
+          room.num &&
+          room.num.toLowerCase().includes(searchValue.toLowerCase())
+        ) {
+          const isDuplicate = result.some(
+            (item) => item.num === room.num && item.name === room.name
+          );
+          if (!isDuplicate) {
+            result.push({
+              buildingId: building.buildingId,
+              buildingName: building.buildingName,
+              basement: building.basement || 0, // 기본값 0
+              floor: floorLevel,
+              num: room.num,
+              name: room.name,
+            });
+          }
+        }
+      });
+    }
+
+    data.classRoom.forEach((building: ClassRoom) => {
+      if (building.basement) {
+        for (let i = 1; i <= building.basement; i++) {
+          const basementKey = `b${i}`;
+          const basementRooms = building[basementKey];
+
+          if (Array.isArray(basementRooms)) {
+            searchInFloor(basementRooms, building, -i);
+          }
+        }
+      }
+
+      // floor 검사
+      for (let i = 1; i <= building.floor; i++) {
+        const floorKey = `${i}f`;
+        const floorRooms = building[floorKey];
+
+        // floorRooms가 Room[] 타입인지 확인
+        if (Array.isArray(floorRooms)) {
+          searchInFloor(floorRooms, building, i); // Room[] 타입이면 호출
+        }
+      }
+    });
+
+    return result;
+  }
+
   const debounceInputValue = useDebounce(inputValue, 300);
   useEffect(() => {
-    //탐색을 통해 반환되는 결과는 전역으로 관리되어야 한다. (지도에서 사용)
     const handleSearch = () => {
-      if (isNumber(debounceInputValue)) {
-        const numberValue = parseFloat(debounceInputValue);
-
-        //건물에 해당하는 입력에 대한 처리
-        if (numberValue < 100) {
-          const buildings = buildingsData?.filter((b) =>
-            String(b.buildingId).startsWith(String(numberValue))
+      if (debounceInputValue) {
+        //건물 찾기
+        if (debounceInputValue.length < 3) {
+          clearResultClassRoom();
+          const buildingResults = buildingsData?.filter(
+            (b) =>
+              //입력 데이터가 건물이름에 포함
+              b.buildingName.includes(debounceInputValue) ||
+              //건물 번호가 입력데이터로 시작
+              String(b.buildingId).startsWith(debounceInputValue)
           );
-          if (buildings) setResultBuilding(buildings);
-        } else {
-          //강의실에 해당하는 입력에 대한 처리
-          console.log("두 자리수 이상입니다. 강의실 찾기 로직을 만들어주세여");
-          // setResultClassRoom({});
+          if (buildingResults && buildingResults.length > 0) {
+            // console.log("buildingResults", buildingResults);
+            setResultBuilding(buildingResults);
+          }
+        }
+        //강의실 찾기
+        else {
+          //3글자 이상이라면 2글자에서 나왔던 결과를 초기화
+          //현재 입력값에서 입력이 달라지면 결과를 초기화()
+          console.log("3글자 이상");
+          const classroomResults = findClassrooms(
+            classRoom,
+            debounceInputValue
+          );
+          if (classroomResults.length > 0) {
+            console.log("classroomResults", classroomResults);
+            const resultClassRoomSet = new Set(resultClassRoom);
+            classroomResults.forEach((item) => {
+              if (!resultClassRoomSet.has(item)) {
+                clearResultClassRoom();
+                setResultClassRoom(classroomResults);
+              }
+            });
+          }
         }
       } else {
-        //문자열에 대한 처리로 건물 또는 강의실로 결과 반환
-        console.log("숫자가 아닌 문자입니다.");
-        //강의실에서 일치하는 값이 나오면 강의실 결과 업데이트
-        //건물에서 일치하는 값이 나오면 건물 결과 업데이트
+        console.log("입력값이 없습니다.");
       }
     };
 
-    if (debounceInputValue) {
-      handleSearch();
-    } else {
-      console.log("입력값이 없습니다.");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    handleSearch();
   }, [debounceInputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-  const isNumber = (value: string) => {
-    const parsedValue = parseFloat(value);
-    return !isNaN(parsedValue) && isFinite(parsedValue);
-  };
-  //검색을 시작하기 전 -> 최근 기록, 저장 기록 보여주기
-  //검색을 시작 -> 결과창
 
   const Places = () => {
     if (resultBuilding?.length || resultClassRoom?.length) {
       return (
         <div>
           {resultClassRoom?.map((i) => (
-            <div className="resultBlock classRoom" key={i.name}>
+            <div className="resultBlock classRoom" key={uuidv4()}>
               {i.name}
+              {i.num}
             </div>
           ))}
           {resultBuilding?.map((building) => (

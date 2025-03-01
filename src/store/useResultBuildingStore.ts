@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { Building } from "../interfaces/place";
+import { BuildingResult } from "../interfaces/place";
 interface BuildingState {
-  resultBuilding: Building[] | null;
-  setResultBuilding: (building: Building[]) => void;
+  resultBuilding: BuildingResult[] | null;
+  setResultBuilding: (building: BuildingResult[]) => void;
   clearResultBuilding: () => void;
 }
 

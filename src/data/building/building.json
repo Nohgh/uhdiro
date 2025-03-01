@@ -58,7 +58,7 @@
     },
     {
       "buildingId": 9,
-      "buildingName": ["CLC", "Campus Life Center"],
+      "buildingName": "Campus Life Center (CLC)",
       "imgUrl": "..",
       "lat": "37.88654716077921",
       "lng": "127.74011963991391"
@@ -122,7 +122,7 @@
     },
     {
       "buildingId": 18,
-      "buildingName": ["한림 레크리에이션센터", "렉센"],
+      "buildingName": "한림 레크리에이션센터 (렉센터)",
       "imgUrl": "..",
       "lat": "37.884583532524125",
       "lng": "127.73862223857431"
@@ -234,7 +234,7 @@
     },
     {
       "buildingId": 34,
-      "buildingName": ["ILSONG Stadium", "운동장"],
+      "buildingName": "ILSONG Stadium (운동장)",
       "imgUrl": "..",
       "lat": "37.887729231683686",
       "lng": "127.73982454269684"
