@@ -26,7 +26,7 @@ export interface ClassRoomResult {
 
 export interface BuildingResult {
   buildingId: number;
-  buildingName: string | string[];
+  buildingName: string;
   imgUrl: string;
   lat?: string;
   lng?: string;

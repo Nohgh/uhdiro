@@ -5,7 +5,6 @@ import classRoom from "../../data/classRoom/classRoom.json";
 import {
   BuildingResult,
   ClassRoomResult,
-  ClassRoomData,
   ClassRoom,
   Room,
 } from "../../interfaces/place";
@@ -20,6 +19,10 @@ const Header = () => {
 
   const [showPlacePanel, setShowPlacePanel] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const clickXmark = () => {
+    setInputValue("");
+    setShowPlacePanel(false);
+  };
   const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
     []
   );
@@ -30,7 +33,8 @@ const Header = () => {
   });
   console.log("selectResult", selectResult);
 
-  const { resultBuilding, setResultBuilding } = useResultBuildingStore();
+  const { resultBuilding, setResultBuilding, clearResultBuilding } =
+    useResultBuildingStore();
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
 
@@ -57,12 +61,8 @@ const Header = () => {
     };
   }, []);
 
-  function findClassrooms(
-    data: ClassRoomData,
-    searchValue: string
-  ): ClassRoomResult[] {
+  function findClassrooms(searchValue: string): ClassRoomResult[] {
     const result: ClassRoomResult[] = [];
-    // console.log("findClassrooms");
     function searchInFloor(
       floorData: Room[],
       building: ClassRoom,
@@ -70,27 +70,22 @@ const Header = () => {
     ): void {
       floorData.forEach((room: Room) => {
         if (
-          room.num &&
-          room.num.toLowerCase().includes(searchValue.toLowerCase())
+          room.num?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          room.name?.toLowerCase().includes(searchValue.toLowerCase())
         ) {
-          const isDuplicate = result.some(
-            (item) => item.num === room.num && item.name === room.name
-          );
-          if (!isDuplicate) {
-            result.push({
-              buildingId: building.buildingId,
-              buildingName: building.buildingName,
-              basement: building.basement || 0, // 기본값 0
-              floor: floorLevel,
-              num: room.num,
-              name: room.name,
-            });
-          }
+          result.push({
+            buildingId: building.buildingId,
+            buildingName: building.buildingName,
+            basement: building.basement || 0, // 기본값 0
+            floor: floorLevel,
+            num: room.num,
+            name: room.name,
+          });
         }
       });
     }
 
-    data.classRoom.forEach((building: ClassRoom) => {
+    classRoom.classRoom.forEach((building: ClassRoom) => {
       if (building.basement) {
         for (let i = 1; i <= building.basement; i++) {
           const basementKey = `b${i}`;
@@ -121,40 +116,29 @@ const Header = () => {
   useEffect(() => {
     const handleSearch = () => {
       if (debounceInputValue) {
-        //건물 찾기
-        if (debounceInputValue.length < 3) {
-          clearResultClassRoom();
-          const buildingResults = buildingsData?.filter(
-            (b) =>
-              //입력 데이터가 건물이름에 포함
-              b.buildingName.includes(debounceInputValue) ||
-              //건물 번호가 입력데이터로 시작
-              String(b.buildingId).startsWith(debounceInputValue)
-          );
-          if (buildingResults && buildingResults.length > 0) {
-            // console.log("buildingResults", buildingResults);
-            setResultBuilding(buildingResults);
-          }
+        //건물 검색
+        const buildingResults = buildingsData?.filter(
+          (b) =>
+            b.buildingName
+              .toLowerCase()
+              .includes(debounceInputValue.toLowerCase()) ||
+            String(b.buildingId).startsWith(debounceInputValue)
+        );
+        //건물 결과 세팅
+        if (buildingResults && buildingResults.length > 0) {
+          setResultBuilding(buildingResults);
         }
-        //강의실 찾기
-        else {
-          //3글자 이상이라면 2글자에서 나왔던 결과를 초기화
-          //현재 입력값에서 입력이 달라지면 결과를 초기화()
-          console.log("3글자 이상");
-          const classroomResults = findClassrooms(
-            classRoom,
-            debounceInputValue
-          );
-          if (classroomResults.length > 0) {
-            console.log("classroomResults", classroomResults);
-            const resultClassRoomSet = new Set(resultClassRoom);
-            classroomResults.forEach((item) => {
-              if (!resultClassRoomSet.has(item)) {
-                clearResultClassRoom();
-                setResultClassRoom(classroomResults);
-              }
-            });
-          }
+
+        //강의실 검색
+        const classroomResults = findClassrooms(debounceInputValue);
+        if (classroomResults.length > 0) {
+          const resultClassRoomSet = new Set(resultClassRoom);
+          classroomResults.forEach((item) => {
+            if (!resultClassRoomSet.has(item)) {
+              //강의실 결과 세팅
+              setResultClassRoom(classroomResults);
+            }
+          });
         }
       } else {
         console.log("입력값이 없습니다.");
@@ -162,6 +146,11 @@ const Header = () => {
     };
 
     handleSearch();
+
+    return () => {
+      clearResultClassRoom();
+      clearResultBuilding();
+    };
   }, [debounceInputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,8 +163,33 @@ const Header = () => {
         <div>
           {resultClassRoom?.map((i) => (
             <div className="resultBlock classRoom" key={uuidv4()}>
-              {i.name}
-              {i.num}
+              <svg
+                className="placeIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+              >
+                <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+              </svg>
+              <div className="classRoom-data">
+                <div className="classRoom-data-name">{i.name}</div>
+                <div
+                  className={`classRoom-data-other ${i.name ? "" : "notname"}`}
+                >
+                  <div className="detail">{i.buildingName} /</div>
+                  <div className="detail">
+                    {i.floor > 0 ? i.floor : `지하 ${-i.floor}`}층
+                    {i.num ? " /" : ""}
+                  </div>
+                  <div className="detail">{i.num}</div>
+                </div>
+              </div>
+              <svg
+                className="moveIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
+              </svg>
             </div>
           ))}
           {resultBuilding?.map((building) => (
@@ -191,12 +205,13 @@ const Header = () => {
             >
               {/* 선택한 빌딩과 강의실 정보는 campus map으로 전달되어야 한다.-> 전역 상태 관리 */}
               <svg
-                className="placeIcon"
                 xmlns="http://www.w3.org/2000/svg"
+                className="placeIcon"
                 viewBox="0 0 384 512"
               >
-                <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                <path d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z" />
               </svg>
+
               <div className="building-data">
                 <div className="building-data__name">
                   {building.buildingName}
@@ -245,13 +260,16 @@ const Header = () => {
           value={inputValue}
           onChange={handleInputChange}
         />
-        <svg
-          className="header__search-box__icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-        >
-          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-        </svg>
+        {inputValue && (
+          <svg
+            className="header__search-box__icon"
+            onClick={() => clickXmark()}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+          >
+            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" />
+          </svg>
+        )}
       </div>
       {showPlacePanel && (
         <div className="place-panel" ref={placePanel}>

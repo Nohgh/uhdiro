@@ -52,7 +52,7 @@
     &__icon {
       width: 1rem;
       height: 1rem;
-      color: $grey-3;
+      fill: $grey-2;
     }
   }
   .place-panel {
@@ -71,6 +71,7 @@
         padding-bottom: 0.1rem;
         border-bottom: 1px solid $grey-3;
       }
+
       .placeIcon {
         width: 1.4rem;
         height: 1.4rem;
@@ -81,9 +82,31 @@
         height: 1.4rem;
         fill: #b0b0b0;
       }
+
       .classRoom {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 3rem;
+        &-data {
+          width: 80%;
+          &-name {
+            font-size: 1rem;
+          }
+          &-other {
+            display: flex;
+            font-size: 0.8rem;
+            color: $grey-1;
+            .detail {
+              padding-right: 0.4rem;
+            }
+          }
+          .notname {
+            font-size: 1rem;
+            color: black;
+          }
+        }
       }
       .building {
         position: relative;
