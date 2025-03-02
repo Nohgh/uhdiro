@@ -55,13 +55,14 @@
       fill: $grey-2;
     }
   }
-  .place-panel {
+  .search-panel {
     width: 100%;
     background-color: #f4f4f4;
     height: 24rem;
     margin-top: 0.3rem;
     border-bottom: 1px solid #b0b0b0;
     overflow: auto;
+
     &-resultTab {
       position: relative;
       .resultBlock {

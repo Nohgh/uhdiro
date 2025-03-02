@@ -10,56 +10,145 @@ import {
 } from "../../interfaces/place";
 import useDebounce from "../../hooks/useDebounce";
 import useResultBuildingStore from "../../store/useResultBuildingStore";
-import "./Header.scss";
 import useResultClassRoomStore from "../../store/useResultClassRoomStore";
+import "./Header.scss";
 
 const Header = () => {
+  //헤더의 검색창
   const searchBox = useRef<null | HTMLDivElement>(null);
-  const placePanel = useRef<null | HTMLDivElement>(null);
 
-  const [showPlacePanel, setShowPlacePanel] = useState(false);
+  //검색결과창
+  const searchPanel = useRef<null | HTMLDivElement>(null);
+
+  //검색결과창 표시 여부
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
+
+  //입력값
   const [inputValue, setInputValue] = useState("");
+
+  //func: 입력값 초기화 아이콘 클릭
   const clickXmark = () => {
     setInputValue("");
-    setShowPlacePanel(false);
+    setShowSearchPanel(false);
   };
+
+  //건물 데이터
   const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
     []
   );
-  // interface selectResult {
-  //   selectType: string;
-  //   selectData: ClassRoomResult | BuildingResult |
-  // }
-  const [selectResult, setSelectedResult] = useState({
+
+  //interface: 선택한 결과 타입
+  interface SelectResultType {
+    selectType: string;
+    selectData: BuildingResult | ClassRoomResult | null;
+  }
+
+  //선택한 결과
+  const [selectResult, setSelectedResult] = useState<SelectResultType>({
     selectType: "none",
-    selectData: {},
+    selectData: null,
   });
+
+  //건물 검색 결과
   const { resultBuilding, setResultBuilding, clearResultBuilding } =
     useResultBuildingStore();
 
+  //강의실 검색 결과
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
 
+  //func: 위도 경도 검색
+  const findLocation = (buildingId: number) => {
+    const building = buildingsData?.find((b) => b.buildingId === buildingId);
+    if (building) {
+      return {
+        lat: building.lat,
+        lng: building.lng,
+      };
+    }
+  };
+
+  //장소 클릭에 따른 장소 저장
   useEffect(() => {
-    if (selectResult.selectType === "building") console.log("building 선택");
-    if (selectResult.selectType === "classRoom") console.log("classRoom 선택");
-    console.log(selectResult.selectData);
+    //localStorage에 저장되는 데이터
+    const localSelectData = {
+      types: "",
+      buildingId: 0,
+      buildingName: "",
+      lat: "",
+      lng: "",
+      floor: 0,
+      name: "",
+      num: "",
+    };
+
+    if (selectResult.selectType === "none") console.log(" 선택 x");
+    //선택한 유형에 따라 localstorage에 저장할 값들 입력
+    if (selectResult.selectType === "building") {
+      const SelectData = selectResult.selectData as BuildingResult;
+
+      localSelectData.types = selectResult.selectType;
+      localSelectData.buildingId = SelectData?.buildingId || 0;
+      localSelectData.buildingName = SelectData?.buildingName || "";
+      localSelectData.lat = SelectData?.lat || "";
+      localSelectData.lng = SelectData?.lng || "";
+    }
+    if (selectResult.selectType === "classRoom") {
+      const SelectData = selectResult.selectData as ClassRoomResult;
+      // const buildingLat=
+      const classRoomLocation = findLocation(SelectData?.buildingId);
+
+      localSelectData.types = selectResult.selectType;
+      localSelectData.buildingId = SelectData?.buildingId || 0;
+      localSelectData.buildingName = SelectData?.buildingName || "";
+      localSelectData.lat = classRoomLocation?.lat || "";
+      localSelectData.lng = classRoomLocation?.lng || "";
+      localSelectData.floor = SelectData?.floor || 0;
+      localSelectData.name = SelectData?.name || "";
+      localSelectData.num = SelectData?.num || "";
+    }
+    console.log("로컬스토리지에 입력할 데이터", localSelectData);
+    /**
+     * 선택한 정보를 로컬스토리지에 저장할 수 있는 자료구조로 만든다.
+     * 1. recent데이터를 가져온다
+     * 2. recent데이터가 있다면 recent 데이터를 업데이트한다.
+     *      2-1.최근 기록에서 현재 선택한 정보가 있으면 해당 기록을 최상단으로 올린다.
+     *      2-2.최근 기록에서 현재 선택한 정보가 없다면 최상단에 저장한다.
+     * 3. recent데이터가 있다면 recent 데이터를 업데이트 한다.
+     */
+    const recentData = JSON.parse(
+      window.localStorage.getItem("recent") || "[]"
+    );
+    //선택 o , 최근 기록 x
+    if (selectResult.selectType !== "none" && recentData.length === 0) {
+      console.log("선택 o , 최근 기록 x");
+      // window.localStorage.setItem(
+      //   "recent",
+      //   JSON.stringify(selectResult.selectData)
+      // );
+    }
+    //선택 o, 최근 기록 o
+    else if (selectResult.selectType !== "none" && recentData.length !== 0) {
+      console.log("선택o, 최근 기록 o");
+    }
   }, [selectResult]);
 
+  //건물 데이터 초기화
   useEffect(() => {
     setBuildingsData(building.buildings);
   }, []);
 
+  //패널 클릭 여부
   useEffect(() => {
     const handleClickSearchBox = (event: MouseEvent) => {
       const target = event.target as Node;
       if (
         !searchBox.current?.contains(target) &&
-        !placePanel.current?.contains(target)
+        !searchPanel.current?.contains(target)
       ) {
-        setShowPlacePanel(false);
+        setShowSearchPanel(false);
       } else {
-        setShowPlacePanel(true);
+        setShowSearchPanel(true);
       }
     };
     document.addEventListener("mousedown", handleClickSearchBox);
@@ -69,6 +158,7 @@ const Header = () => {
     };
   }, []);
 
+  //func: 강의실 찾기
   const findClassrooms = (searchValue: string) => {
     const result: ClassRoomResult[] = [];
     function searchInFloor(
@@ -120,7 +210,10 @@ const Header = () => {
     return result;
   };
 
+  //입력값 debounce 최적화
   const debounceInputValue = useDebounce(inputValue, 300);
+
+  //입력에 따른 결과 세팅
   useEffect(() => {
     const handleSearch = () => {
       if (debounceInputValue) {
@@ -162,10 +255,12 @@ const Header = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
 
+  //입력값 변화 관리
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
+  //Component: 검색 결과 컴포넌트
   const Places = () => {
     if (resultBuilding?.length || resultClassRoom?.length) {
       return (
@@ -288,12 +383,12 @@ const Header = () => {
           </svg>
         )}
       </div>
-      {showPlacePanel && (
-        <div className="place-panel" ref={placePanel}>
+      {showSearchPanel && (
+        <div className="search-panel" ref={searchPanel}>
           {inputValue ? (
-            <div className="place-panel-resultTab">{Places()}</div>
+            <div className="search-panel-resultTab">{Places()}</div>
           ) : (
-            <div className="place-panel-savedTab">
+            <div className="search-panel-savedTab">
               최근 기록과 저장된 내 장소가 나옵니다.
             </div>
           )}
