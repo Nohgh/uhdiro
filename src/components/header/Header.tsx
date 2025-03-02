@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import building from "../../data/building/building.json";
 import classRoom from "../../data/classRoom/classRoom.json";
@@ -12,36 +18,62 @@ import useDebounce from "../../hooks/useDebounce";
 import useResultBuildingStore from "../../store/useResultBuildingStore";
 import useResultClassRoomStore from "../../store/useResultClassRoomStore";
 import "./Header.scss";
+//interface: 선택한 결과 타입
+interface SelectResultType {
+  selectType: string;
+  selectData: BuildingResult | ClassRoomResult | null;
+}
+//interface최근기록 타입
+interface RecentDataType {
+  uuid: string;
+  mon: string;
+  day: string;
+  types: string;
+  buildingId: number;
+  buildingName: string;
+  lat: string;
+  lng: string;
+  floor: number;
+  name: string;
+  num: string;
+}
+
+/**
+ * TODO:
+ * 결과 요소 hover background
+ * 결과 선택시 이동
+ * 최근 기록 삭제 선택시 삭제
+ */
 
 const Header = () => {
+  //------useRef------
+
   //헤더의 검색창
   const searchBox = useRef<null | HTMLDivElement>(null);
 
   //검색결과창
   const searchPanel = useRef<null | HTMLDivElement>(null);
 
-  //검색결과창 표시 여부
-  const [showSearchPanel, setShowSearchPanel] = useState(false);
+  //------useState------
 
   //입력값
   const [inputValue, setInputValue] = useState("");
 
-  //func: 입력값 초기화 아이콘 클릭
-  const clickXmark = () => {
-    setInputValue("");
-    setShowSearchPanel(false);
-  };
-
   //건물 데이터
-  const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
-    []
-  );
+  // const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
+  //   []
+  // );
+  const buildingsData = useMemo(() => building.buildings, []);
 
-  //interface: 선택한 결과 타입
-  interface SelectResultType {
-    selectType: string;
-    selectData: BuildingResult | ClassRoomResult | null;
-  }
+  //검색결과창 표시 여부
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
+
+  //useState를 쓰지 않아도 되는가...?
+
+  //localstorage에 저장된 최근 기록
+  const [recentDataList, setRecentDataList] = useState<RecentDataType[]>(() => {
+    return JSON.parse(window.localStorage.getItem("recent") || "[]");
+  });
 
   //선택한 결과
   const [selectResult, setSelectedResult] = useState<SelectResultType>({
@@ -49,6 +81,9 @@ const Header = () => {
     selectData: null,
   });
 
+  const [panelMode, setPanelMode] = useState("recent");
+
+  //------custom hooks------
   //건물 검색 결과
   const { resultBuilding, setResultBuilding, clearResultBuilding } =
     useResultBuildingStore();
@@ -57,7 +92,20 @@ const Header = () => {
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
 
-  //func: 위도 경도 검색
+  //------func------
+
+  //입력값 초기화 아이콘 클릭
+  const clickXmark = () => {
+    setInputValue("");
+    setShowSearchPanel(false);
+  };
+
+  //입력값 변화 관리
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  //위도 경도 검색
   const findLocation = (buildingId: number) => {
     const building = buildingsData?.find((b) => b.buildingId === buildingId);
     if (building) {
@@ -68,98 +116,8 @@ const Header = () => {
     }
   };
 
-  //장소 클릭에 따른 장소 저장
-  useEffect(() => {
-    //localStorage에 저장되는 데이터
-    const localSelectData = {
-      types: "",
-      buildingId: 0,
-      buildingName: "",
-      lat: "",
-      lng: "",
-      floor: 0,
-      name: "",
-      num: "",
-    };
-
-    if (selectResult.selectType === "none") console.log(" 선택 x");
-    //선택한 유형에 따라 localstorage에 저장할 값들 입력
-    if (selectResult.selectType === "building") {
-      const SelectData = selectResult.selectData as BuildingResult;
-
-      localSelectData.types = selectResult.selectType;
-      localSelectData.buildingId = SelectData?.buildingId || 0;
-      localSelectData.buildingName = SelectData?.buildingName || "";
-      localSelectData.lat = SelectData?.lat || "";
-      localSelectData.lng = SelectData?.lng || "";
-    }
-    if (selectResult.selectType === "classRoom") {
-      const SelectData = selectResult.selectData as ClassRoomResult;
-      // const buildingLat=
-      const classRoomLocation = findLocation(SelectData?.buildingId);
-
-      localSelectData.types = selectResult.selectType;
-      localSelectData.buildingId = SelectData?.buildingId || 0;
-      localSelectData.buildingName = SelectData?.buildingName || "";
-      localSelectData.lat = classRoomLocation?.lat || "";
-      localSelectData.lng = classRoomLocation?.lng || "";
-      localSelectData.floor = SelectData?.floor || 0;
-      localSelectData.name = SelectData?.name || "";
-      localSelectData.num = SelectData?.num || "";
-    }
-    console.log("로컬스토리지에 입력할 데이터", localSelectData);
-    /**
-     * 선택한 정보를 로컬스토리지에 저장할 수 있는 자료구조로 만든다.
-     * 1. recent데이터를 가져온다
-     * 2. recent데이터가 있다면 recent 데이터를 업데이트한다.
-     *      2-1.최근 기록에서 현재 선택한 정보가 있으면 해당 기록을 최상단으로 올린다.
-     *      2-2.최근 기록에서 현재 선택한 정보가 없다면 최상단에 저장한다.
-     * 3. recent데이터가 있다면 recent 데이터를 업데이트 한다.
-     */
-    const recentData = JSON.parse(
-      window.localStorage.getItem("recent") || "[]"
-    );
-    //선택 o , 최근 기록 x
-    if (selectResult.selectType !== "none" && recentData.length === 0) {
-      console.log("선택 o , 최근 기록 x");
-      // window.localStorage.setItem(
-      //   "recent",
-      //   JSON.stringify(selectResult.selectData)
-      // );
-    }
-    //선택 o, 최근 기록 o
-    else if (selectResult.selectType !== "none" && recentData.length !== 0) {
-      console.log("선택o, 최근 기록 o");
-    }
-  }, [selectResult]);
-
-  //건물 데이터 초기화
-  useEffect(() => {
-    setBuildingsData(building.buildings);
-  }, []);
-
-  //패널 클릭 여부
-  useEffect(() => {
-    const handleClickSearchBox = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (
-        !searchBox.current?.contains(target) &&
-        !searchPanel.current?.contains(target)
-      ) {
-        setShowSearchPanel(false);
-      } else {
-        setShowSearchPanel(true);
-      }
-    };
-    document.addEventListener("mousedown", handleClickSearchBox);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickSearchBox);
-    };
-  }, []);
-
-  //func: 강의실 찾기
-  const findClassrooms = (searchValue: string) => {
+  //강의실 찾기
+  const findClassrooms = useCallback((searchValue: string) => {
     const result: ClassRoomResult[] = [];
     function searchInFloor(
       floorData: Room[],
@@ -208,14 +166,130 @@ const Header = () => {
     });
 
     return result;
+  }, []);
+
+  /**최근 기록 조건 비교 함수 */
+  const matchRecentData = (
+    item: RecentDataType,
+    recentData: RecentDataType
+  ): boolean => {
+    if (recentData.types === "building") {
+      // types가 "building"일 때, buildingId를 비교
+      return (
+        item.types === "building" && item.buildingId === recentData.buildingId
+      );
+    } else if (recentData.types === "classRoom") {
+      // types가 "classRoom"일 때, name과 num을 비교
+      return (
+        item.types === "classRoom" &&
+        item.name === recentData.name &&
+        item.num === recentData.num
+      );
+    }
+    return false; // 위 조건에 해당하지 않으면 일치하지 않음
   };
+  //최근 기록 삭제 함수
+  const deleteRecentRecord = (recentData: RecentDataType) => {
+    setRecentDataList((prevList) => {
+      const updatedList = prevList.filter(
+        (item) => !matchRecentData(item, recentData)
+      );
+      window.localStorage.setItem("recent", JSON.stringify(updatedList));
+      return updatedList;
+    });
+  };
+  //------useEffect------
+  //장소 클릭에 따른 장소 저장
+  useEffect(() => {
+    if (selectResult.selectType === "none") return;
+
+    const currentDate = new Date();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const recentData: RecentDataType = {
+      uuid: uuidv4(),
+      mon: month,
+      day: day,
+      types: selectResult.selectType,
+      buildingId: 0,
+      buildingName: "",
+      lat: "",
+      lng: "",
+      floor: 0,
+      name: "",
+      num: "",
+    };
+
+    if (selectResult.selectType === "building") {
+      const SelectData = selectResult.selectData as BuildingResult;
+      recentData.buildingId = SelectData?.buildingId || 0;
+      recentData.buildingName = SelectData?.buildingName || "";
+      recentData.lat = SelectData?.lat || "";
+      recentData.lng = SelectData?.lng || "";
+    }
+    if (selectResult.selectType === "classRoom") {
+      const SelectData = selectResult.selectData as ClassRoomResult;
+      const classRoomLocation = findLocation(SelectData?.buildingId);
+      recentData.buildingId = SelectData?.buildingId || 0;
+      recentData.buildingName = SelectData?.buildingName || "";
+      recentData.lat = classRoomLocation?.lat || "";
+      recentData.lng = classRoomLocation?.lng || "";
+      recentData.floor = SelectData?.floor || 0;
+      recentData.name = SelectData?.name || "";
+      recentData.num = SelectData?.num || "";
+    }
+
+    setRecentDataList((prev) => {
+      const updatedList = [...prev];
+      const existingIndex = updatedList.findIndex((item) =>
+        matchRecentData(item, recentData)
+      );
+
+      if (existingIndex !== -1) {
+        // 이미 존재하는 경우 최상단 이동
+        const [existingData] = updatedList.splice(existingIndex, 1);
+        updatedList.unshift(existingData);
+      } else {
+        // 새로운 데이터 추가
+        updatedList.unshift(recentData);
+      }
+
+      // localStorage 업데이트
+      window.localStorage.setItem("recent", JSON.stringify(updatedList));
+      return updatedList;
+    });
+    setSelectedResult({ selectType: "none", selectData: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectResult, recentDataList]);
+
+  //패널 클릭 여부
+  useEffect(() => {
+    const handleClickSearchBox = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        !searchBox.current?.contains(target) &&
+        !searchPanel.current?.contains(target)
+      ) {
+        setShowSearchPanel(false);
+      } else {
+        setShowSearchPanel(true);
+      }
+    };
+    document.addEventListener("mousedown", handleClickSearchBox);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickSearchBox);
+    };
+  }, []);
 
   //입력값 debounce 최적화
   const debounceInputValue = useDebounce(inputValue, 300);
-
   //입력에 따른 결과 세팅
   useEffect(() => {
+    console.log("debounce useeffect");
+
     const handleSearch = () => {
+      console.log("handleSearch");
       if (debounceInputValue) {
         //건물 검색
         const buildingResults = buildingsData?.filter(
@@ -254,14 +328,8 @@ const Header = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
-
-  //입력값 변화 관리
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
   //Component: 검색 결과 컴포넌트
-  const Places = () => {
+  const SearchPlaces = () => {
     if (resultBuilding?.length || resultClassRoom?.length) {
       return (
         <>
@@ -352,6 +420,76 @@ const Header = () => {
 
     return <div>결과가 검색되지 않았습니다. 숫자 또는 문자를 확인해주세요</div>;
   };
+  const RecentPlace = () => {
+    return (
+      <>
+        {recentDataList?.map((recent: RecentDataType) => (
+          <div
+            className="search-panel-storaged-place-container"
+            key={recent.uuid}
+          >
+            {recent.types === "building" ? (
+              <div className="recent_building">
+                <svg
+                  className="recent_icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z" />
+                </svg>
+                <div className="recent_place">
+                  <div className="recent_place__name">
+                    {recent.buildingName}
+                  </div>
+                  <div className="recent_place__id">
+                    {recent.buildingId}번 건물
+                  </div>
+                </div>
+                <svg
+                  className="recent_icon"
+                  onClick={() => deleteRecentRecord(recent)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 384 512"
+                >
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                </svg>
+              </div>
+            ) : (
+              <div className="recent_building recent_classRoom">
+                <svg
+                  className="recent_icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z" />
+                </svg>
+                <div className="recent_place classRoom_info">
+                  <div className="recent_place__name">{recent.name}</div>
+                  <div className="recent_place__detail">
+                    <div className="detail_block">{recent.buildingName}</div>
+                    <div className="detail_block">{recent.floor}층</div>
+                    <div className="detail_block">{recent.num}호</div>
+                  </div>
+                </div>
+                <svg
+                  className="recent_icon"
+                  onClick={() => deleteRecentRecord(recent)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 384 512"
+                >
+                  <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+        {/* 저장된 값이 없을떄 의 처리 */}
+      </>
+    );
+  };
+  const SavedPlace = () => {
+    return <div>저장된 장소입니다.</div>;
+  };
   return (
     <div className="header">
       <div className="header__top">
@@ -386,10 +524,34 @@ const Header = () => {
       {showSearchPanel && (
         <div className="search-panel" ref={searchPanel}>
           {inputValue ? (
-            <div className="search-panel-resultTab">{Places()}</div>
+            <div className="search-panel-resultTab">{SearchPlaces()}</div>
           ) : (
-            <div className="search-panel-savedTab">
-              최근 기록과 저장된 내 장소가 나옵니다.
+            <div className="search-panel-storaged">
+              <div className="search-panel-storaged-navigation">
+                <div
+                  className={`${
+                    panelMode === "recent" ? "clicked" : ""
+                  } panelBtn`}
+                  onClick={() => setPanelMode("recent")}
+                >
+                  최근기록
+                </div>
+                <div
+                  className={`${
+                    panelMode === "saved" ? "clicked" : ""
+                  } panelBtn`}
+                  onClick={() => setPanelMode("saved")}
+                >
+                  내장소
+                </div>
+              </div>
+              {panelMode === "recent" ? (
+                <div className="search-panel-storaged-place">
+                  {RecentPlace()}
+                </div>
+              ) : (
+                <div className="saved-place">{SavedPlace()}</div>
+              )}
             </div>
           )}
         </div>
