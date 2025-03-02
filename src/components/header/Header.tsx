@@ -40,9 +40,8 @@ interface RecentDataType {
 
 /**
  * TODO:
- * 결과 요소 hover background
+ * 최근 기록 선택시 데이터 올리기
  * 결과 선택시 이동
- * 최근 기록 삭제 선택시 삭제
  */
 
 const Header = () => {
@@ -202,7 +201,7 @@ const Header = () => {
   //장소 클릭에 따른 장소 저장
   useEffect(() => {
     if (selectResult.selectType === "none") return;
-
+    console.log("너 혹시 선택했니?");
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
@@ -286,10 +285,7 @@ const Header = () => {
   const debounceInputValue = useDebounce(inputValue, 300);
   //입력에 따른 결과 세팅
   useEffect(() => {
-    console.log("debounce useeffect");
-
     const handleSearch = () => {
-      console.log("handleSearch");
       if (debounceInputValue) {
         //건물 검색
         const buildingResults = buildingsData?.filter(
@@ -429,7 +425,15 @@ const Header = () => {
             key={recent.uuid}
           >
             {recent.types === "building" ? (
-              <div className="recent_building">
+              <div
+                className="recent_building"
+                onClick={() =>
+                  setSelectedResult({
+                    selectType: "building",
+                    selectData: recent,
+                  })
+                }
+              >
                 <svg
                   className="recent_icon"
                   xmlns="http://www.w3.org/2000/svg"
@@ -447,7 +451,10 @@ const Header = () => {
                 </div>
                 <svg
                   className="recent_icon"
-                  onClick={() => deleteRecentRecord(recent)}
+                  onClick={(event) => {
+                    event.stopPropagation(); // 부모 onClick 실행 방지
+                    deleteRecentRecord(recent);
+                  }}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 384 512"
                 >
@@ -455,7 +462,15 @@ const Header = () => {
                 </svg>
               </div>
             ) : (
-              <div className="recent_building recent_classRoom">
+              <div
+                className="recent_building recent_classRoom"
+                onClick={() =>
+                  setSelectedResult({
+                    selectType: "classRoom",
+                    selectData: recent,
+                  })
+                }
+              >
                 <svg
                   className="recent_icon"
                   xmlns="http://www.w3.org/2000/svg"
@@ -473,7 +488,10 @@ const Header = () => {
                 </div>
                 <svg
                   className="recent_icon"
-                  onClick={() => deleteRecentRecord(recent)}
+                  onClick={(event) => {
+                    event.stopPropagation(); // 부모 onClick 실행 방지
+                    deleteRecentRecord(recent);
+                  }}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 384 512"
                 >
@@ -483,6 +501,7 @@ const Header = () => {
             )}
           </div>
         ))}
+        {!recentDataList && <div>최근기록 없음욘</div>}
         {/* 저장된 값이 없을떄 의 처리 */}
       </>
     );
