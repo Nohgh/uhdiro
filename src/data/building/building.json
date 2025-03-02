@@ -2,14 +2,14 @@
   "buildings": [
     {
       "buildingId": 1,
-      "buildingName": "공학관",
+      "buildingName": "정보과학대학 (공학관)",
       "imgUrl": "..",
       "lat": "37.88635817171518",
       "lng": "127.73577534095007"
     },
     {
       "buildingId": 2,
-      "buildingName": "대학본부-인문1관",
+      "buildingName": "대학본부 인문1관",
       "imgUrl": "..",
       "lat": "37.886497444880995",
       "lng": "127.73799340500857"
@@ -30,7 +30,7 @@
     },
     {
       "buildingId": 5,
-      "buildingName": "대학본부별관",
+      "buildingName": "대학본부 별관",
       "imgUrl": "..",
       "lat": "37.88671795717982",
       "lng": "127.73874586841292"
@@ -66,7 +66,7 @@
 
     {
       "buildingId": 10,
-      "buildingName": "사회경영1관",
+      "buildingName": "사회 경영 1관",
       "imgUrl": "..",
       "lat": "37.88834173717831",
       "lng": "127.73840968878399"
@@ -87,7 +87,7 @@
     },
     {
       "buildingId": 13,
-      "buildingName": "사회·경영2관",
+      "buildingName": "사회 경영 2관",
       "imgUrl": "..",
       "lat": "37.88783796202584",
       "lng": "127.7382909796829"

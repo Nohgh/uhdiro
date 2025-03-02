@@ -26,17 +26,25 @@ const Header = () => {
   const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
     []
   );
-
+  // interface selectResult {
+  //   selectType: string;
+  //   selectData: ClassRoomResult | BuildingResult |
+  // }
   const [selectResult, setSelectedResult] = useState({
     selectType: "none",
     selectData: {},
   });
-  console.log("selectResult", selectResult);
-
   const { resultBuilding, setResultBuilding, clearResultBuilding } =
     useResultBuildingStore();
+
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
+
+  useEffect(() => {
+    if (selectResult.selectType === "building") console.log("building 선택");
+    if (selectResult.selectType === "classRoom") console.log("classRoom 선택");
+    console.log(selectResult.selectData);
+  }, [selectResult]);
 
   useEffect(() => {
     setBuildingsData(building.buildings);
@@ -61,7 +69,7 @@ const Header = () => {
     };
   }, []);
 
-  function findClassrooms(searchValue: string): ClassRoomResult[] {
+  const findClassrooms = (searchValue: string) => {
     const result: ClassRoomResult[] = [];
     function searchInFloor(
       floorData: Room[],
@@ -110,7 +118,7 @@ const Header = () => {
     });
 
     return result;
-  }
+  };
 
   const debounceInputValue = useDebounce(inputValue, 300);
   useEffect(() => {
@@ -151,6 +159,7 @@ const Header = () => {
       clearResultClassRoom();
       clearResultBuilding();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,38 +169,7 @@ const Header = () => {
   const Places = () => {
     if (resultBuilding?.length || resultClassRoom?.length) {
       return (
-        <div>
-          {resultClassRoom?.map((i) => (
-            <div className="resultBlock classRoom" key={uuidv4()}>
-              <svg
-                className="placeIcon"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 384 512"
-              >
-                <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-              </svg>
-              <div className="classRoom-data">
-                <div className="classRoom-data-name">{i.name}</div>
-                <div
-                  className={`classRoom-data-other ${i.name ? "" : "notname"}`}
-                >
-                  <div className="detail">{i.buildingName} /</div>
-                  <div className="detail">
-                    {i.floor > 0 ? i.floor : `지하 ${-i.floor}`}층
-                    {i.num ? " /" : ""}
-                  </div>
-                  <div className="detail">{i.num}</div>
-                </div>
-              </div>
-              <svg
-                className="moveIcon"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-              >
-                <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-              </svg>
-            </div>
-          ))}
+        <>
           {resultBuilding?.map((building) => (
             <div
               className="resultBlock building"
@@ -229,16 +207,55 @@ const Header = () => {
               </svg>
             </div>
           ))}
-        </div>
+          {resultClassRoom?.map((classRoom) => (
+            <div
+              className="resultBlock classRoom"
+              key={uuidv4()}
+              onClick={() =>
+                setSelectedResult({
+                  selectType: "classRoom",
+                  selectData: classRoom,
+                })
+              }
+            >
+              <svg
+                className="placeIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+              >
+                <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+              </svg>
+              <div className="classRoom-data">
+                <div className="classRoom-data-name">{classRoom.name}</div>
+                <div
+                  className={`classRoom-data-other ${
+                    classRoom.name ? "" : "notname"
+                  }`}
+                >
+                  <div className="detail">{classRoom.buildingName} /</div>
+                  <div className="detail">
+                    {classRoom.floor > 0
+                      ? classRoom.floor
+                      : `지하 ${-classRoom.floor}`}
+                    층{classRoom.num ? " /" : ""}
+                  </div>
+                  <div className="detail">{classRoom.num}</div>
+                </div>
+              </div>
+              <svg
+                className="moveIcon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
+              </svg>
+            </div>
+          ))}
+        </>
       );
     }
 
-    return (
-      <div>
-        결과가 검색되지 않았습니다. 결과를 유추하자면 ..곳에 있을 것으로
-        예상됩니다.
-      </div>
-    );
+    return <div>결과가 검색되지 않았습니다. 숫자 또는 문자를 확인해주세요</div>;
   };
   return (
     <div className="header">

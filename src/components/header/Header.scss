@@ -89,6 +89,8 @@
         align-items: center;
         justify-content: space-between;
         height: 3rem;
+        color: $grey-0;
+
         &-data {
           width: 80%;
           &-name {
@@ -104,7 +106,7 @@
           }
           .notname {
             font-size: 1rem;
-            color: black;
+            color: $grey-0;
           }
         }
       }

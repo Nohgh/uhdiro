@@ -2,7 +2,7 @@
   "classRoom": [
     {
       "buildingId": 1,
-      "buildingName": "공학관",
+      "buildingName": "정보과학대학 (공학관)",
       "floor": 4,
       "1f": [
         { "num": "", "name": "북카페" },
@@ -871,7 +871,7 @@
     },
     {
       "buildingId": 9,
-      "buildingName": "CLC",
+      "buildingName": "Campus Life Center (CLC)",
       "basement": 2,
       "floor": 4,
       "b2": [
@@ -1273,7 +1273,7 @@
     },
     {
       "buildingId": 14,
-      "buildingName": "국제교육관",
+      "buildingName": "국제관",
       "floor": 6,
       "1f": [
         { "num": "", "name": "휴게실" },
@@ -1354,8 +1354,14 @@
     },
     {
       "buildingId": 15,
+      "buildingName": "국제회의관",
+      "floor": 1,
+      "1f": [{ "num": "", "name": "" }]
+    },
+    {
+      "buildingId": 16,
       "buildingName": "기초교육관",
-      "floor": 5162,
+      "floor": 5,
       "1f": [
         { "num": "16101", "name": "강의실" },
         { "num": "16102", "name": "강의실" },
@@ -1410,17 +1416,7 @@
         { "num": "16503", "name": "교양기초교육대학 교학팀" }
       ]
     },
-    {
-      "buildingId": 16,
-      "buildingName": "국제교육관",
-      "floor": 6,
-      "1f": [{ "num": "", "name": "휴게실" }],
-      "2f": [{ "num": "14201", "name": "강의실" }],
-      "3f": [{ "num": "14301", "name": "토익 강사실" }],
-      "4f": [{ "num": "14401", "name": "국제학부 세미나실1" }],
-      "5f": [{ "num": "14501", "name": "한국어 교육센터" }],
-      "6f": [{ "num": "14601", "name": "노은미 교수실" }]
-    },
+
     {
       "buildingId": 17,
       "buildingName": "일송기념도서관",
@@ -1464,8 +1460,8 @@
       "4f": [
         { "num": "", "name": "시스템실" },
         { "num": "", "name": "교육실" },
-        { "num": "", "name": "C.Square" },
-        { "num": "", "name": "씨스퀘어" },
+        { "num": "", "name": "C.Square (C Square)" },
+        { "num": "", "name": "씨스퀘어 " },
         { "num": "", "name": "창의융합룸" },
         { "num": "17405", "name": "스터디룸" },
         { "num": "17406", "name": "스터디룸" },
@@ -1484,7 +1480,7 @@
     },
     {
       "buildingId": 18,
-      "buildingName": "한림레크리에이션센터",
+      "buildingName": "한림 레크리에이션센터 (렉센터)",
       "floor": 1,
       "1f": [{ "num": "", "name": "" }]
     },
@@ -1502,7 +1498,7 @@
     },
     {
       "buildingId": 21,
-      "buildingName": "한림중개의과학연구원",
+      "buildingName": "의료·바이오융합연구원",
       "floor": 1,
       "1f": [{ "num": "", "name": "" }]
     },
@@ -1660,13 +1656,13 @@
     },
     {
       "buildingId": 33,
-      "buildingName": "H Stadium(골프장, 테니스장)",
+      "buildingName": "H Stadium (골프장, 테니스장, 농구장)",
       "floor": 1,
       "1f": [{ "num": "", "name": "" }]
     },
     {
       "buildingId": 34,
-      "buildingName": "ILSong Stadium",
+      "buildingName": "ILSONG Stadium (운동장)",
       "floor": 1,
       "1f": [{ "num": "", "name": "" }]
     },
