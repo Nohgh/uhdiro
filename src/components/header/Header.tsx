@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import building from "../../data/building/building.json";
 import classRoom from "../../data/classRoom/classRoom.json";
@@ -18,6 +12,7 @@ import useDebounce from "../../hooks/useDebounce";
 import useResultBuildingStore from "../../store/useResultBuildingStore";
 import useResultClassRoomStore from "../../store/useResultClassRoomStore";
 import "./Header.scss";
+import useSelectStore from "../../store/useSelectStore";
 //interface: 선택한 결과 타입
 interface SelectResultType {
   selectType: string;
@@ -46,6 +41,7 @@ interface RecentDataType {
 
 const Header = () => {
   //------useRef------
+  const buildingsData = building.buildings;
 
   //헤더의 검색창
   const searchBox = useRef<null | HTMLDivElement>(null);
@@ -58,16 +54,8 @@ const Header = () => {
   //입력값
   const [inputValue, setInputValue] = useState("");
 
-  //건물 데이터
-  // const [buildingsData, setBuildingsData] = useState<BuildingResult[] | null>(
-  //   []
-  // );
-  const buildingsData = useMemo(() => building.buildings, []);
-
   //검색결과창 표시 여부
   const [showSearchPanel, setShowSearchPanel] = useState(false);
-
-  //useState를 쓰지 않아도 되는가...?
 
   //localstorage에 저장된 최근 기록
   const [recentDataList, setRecentDataList] = useState<RecentDataType[]>(() => {
@@ -90,7 +78,7 @@ const Header = () => {
   //강의실 검색 결과
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
-
+  const { setSelectOn } = useSelectStore();
   //------func------
 
   //입력값 초기화 아이콘 클릭
@@ -202,6 +190,7 @@ const Header = () => {
   useEffect(() => {
     if (selectResult.selectType === "none") return;
     console.log("너 혹시 선택했니?");
+
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
@@ -257,9 +246,10 @@ const Header = () => {
       window.localStorage.setItem("recent", JSON.stringify(updatedList));
       return updatedList;
     });
-    setSelectedResult({ selectType: "none", selectData: null });
+
+    // setSelectedResult({ selectType: "none", selectData: null });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectResult, recentDataList]);
+  }, [selectResult]);
 
   //패널 클릭 여부
   useEffect(() => {
@@ -312,7 +302,7 @@ const Header = () => {
           });
         }
       } else {
-        console.log("입력값이 없습니다.");
+        console.log("not input");
       }
     };
 
@@ -333,12 +323,14 @@ const Header = () => {
             <div
               className="resultBlock building"
               key={building.buildingId}
-              onClick={() =>
+              onClick={() => {
                 setSelectedResult({
                   selectType: "building",
                   selectData: building,
-                })
-              }
+                });
+                setSelectOn();
+                setShowSearchPanel(false);
+              }}
             >
               {/* 선택한 빌딩과 강의실 정보는 campus map으로 전달되어야 한다.-> 전역 상태 관리 */}
               <svg
@@ -370,12 +362,14 @@ const Header = () => {
             <div
               className="resultBlock classRoom"
               key={uuidv4()}
-              onClick={() =>
+              onClick={() => {
                 setSelectedResult({
                   selectType: "classRoom",
                   selectData: classRoom,
-                })
-              }
+                });
+                setSelectOn();
+                setShowSearchPanel(false);
+              }}
             >
               <svg
                 className="placeIcon"
@@ -427,12 +421,14 @@ const Header = () => {
             {recent.types === "building" ? (
               <div
                 className="recent_building"
-                onClick={() =>
+                onClick={() => {
                   setSelectedResult({
                     selectType: "building",
                     selectData: recent,
-                  })
-                }
+                  });
+                  setSelectOn();
+                  setShowSearchPanel(false);
+                }}
               >
                 <svg
                   className="recent_icon"
@@ -464,12 +460,14 @@ const Header = () => {
             ) : (
               <div
                 className="recent_building recent_classRoom"
-                onClick={() =>
+                onClick={() => {
                   setSelectedResult({
                     selectType: "classRoom",
                     selectData: recent,
-                  })
-                }
+                  });
+                  setSelectOn();
+                  setShowSearchPanel(false);
+                }}
               >
                 <svg
                   className="recent_icon"
