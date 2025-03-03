@@ -17,15 +17,21 @@ interface RecentDataType {
   name: string;
   num: string;
 }
-
+/**
+ *
+ * TODO:
+ * 1. 위를 포함해서 인터페이스 전역 관리
+ * 2. 모바일 화면 고정
+ *
+ */
 const CampusMap = () => {
   useKakaoLoader();
 
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<kakao.maps.Map>(null);
 
   const { isSelect, setSelectOff } = useSelectStore();
   const [placeData, setPlaceData] = useState<RecentDataType>();
-
+  console.log(placeData);
   useEffect(() => {
     // 맵이 로드된 후 강제로 크기 재계산
     setTimeout(() => {
@@ -51,11 +57,11 @@ const CampusMap = () => {
 
   return (
     <>
-      {placeData ? (
+      {/* {placeData ? (
         <div>{placeData.buildingName}입니다.</div>
       ) : (
         <div>로딩 중!!...</div>
-      )}
+      )} */}
       <Map
         id="map"
         className="map"

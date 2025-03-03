@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(201, 201, 201);
+  --vh: 100%;
 }
 body {
   margin: 0;
