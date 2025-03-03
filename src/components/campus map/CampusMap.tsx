@@ -31,7 +31,7 @@ const CampusMap = () => {
       if (placeDataList !== null) {
         setPlaceData(placeDataList[0]);
       }
-    }, 0);
+    }, 300);
 
     console.log("선택");
     if (isSelect) setSelectOff();
