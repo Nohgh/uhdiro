@@ -1,5 +1,11 @@
 @use "/src/styles/variable.scss" as *;
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../assets/fonts/Pretendard-Regular.otf");
+}
 .header {
+  font-family: "Pretendard";
+
   position: relative;
   z-index: 999;
   width: 100%;

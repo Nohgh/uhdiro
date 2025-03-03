@@ -1,6 +1,12 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url("./assets/fonts/Pretendard-Regular.otf");
+}
+
 .map {
   width: 100%;
   height: calc(100% - 5rem);
+  font-family: "Pretendard";
   .MapMarker {
     .infoWrapper {
       position: relative;
