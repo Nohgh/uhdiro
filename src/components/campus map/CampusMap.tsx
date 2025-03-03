@@ -32,7 +32,7 @@ const CampusMap = () => {
       if (mapRef.current) {
         mapRef.current.relayout();
       }
-    }, 500);
+    }, 100);
   }, []);
 
   useEffect(() => {
