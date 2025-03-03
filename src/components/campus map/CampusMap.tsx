@@ -1,7 +1,7 @@
 import { Map } from "react-kakao-maps-sdk";
 import useKakaoLoader from "../../utils/useKakaoLoader";
 import "./CampusMap.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSelectStore from "../../store/useSelectStore";
 
 interface RecentDataType {
@@ -20,8 +20,20 @@ interface RecentDataType {
 
 const CampusMap = () => {
   useKakaoLoader();
+
+  const mapRef = useRef<any>(null);
+
   const { isSelect, setSelectOff } = useSelectStore();
   const [placeData, setPlaceData] = useState<RecentDataType>();
+
+  useEffect(() => {
+    // 맵이 로드된 후 강제로 크기 재계산
+    setTimeout(() => {
+      if (mapRef.current) {
+        mapRef.current.relayout();
+      }
+    }, 500);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -53,6 +65,7 @@ const CampusMap = () => {
           lng: 127.73791244339736,
         }}
         level={3}
+        ref={mapRef}
       />
     </>
   );
