@@ -6,9 +6,10 @@
   align-items: center;
   background-color: rgb(201, 201, 201);
   --vh: 100%;
+  /* position: relative; */
 }
 body {
   width: 100%;
   margin: 0;
-  overflow: hidden; /* 전체 페이지에서 스크롤을 숨깁니다 */
+  overflow: hidden;
 }
