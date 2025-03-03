@@ -22,7 +22,7 @@ const CampusMap = () => {
   useKakaoLoader();
   const { isSelect, setSelectOff } = useSelectStore();
   const [placeData, setPlaceData] = useState<RecentDataType>();
-
+  console.log(placeData);
   useEffect(() => {
     setTimeout(() => {
       const placeDataList = JSON.parse(
@@ -31,7 +31,7 @@ const CampusMap = () => {
       if (placeDataList !== null) {
         setPlaceData(placeDataList[0]);
       }
-    }, 0);
+    }, 100);
 
     console.log("선택");
     if (isSelect) setSelectOff();
