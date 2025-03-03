@@ -1,4 +1,50 @@
 .map {
   width: 100%;
   height: calc(100% - 5rem);
+  .MapMarker {
+    .infoWrapper {
+      position: relative;
+      .building_info {
+        position: absolute;
+        left: 50%;
+        bottom: 60%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(255, 255, 255);
+        border-radius: 0.3rem;
+        border: 2px solid #ff3c00;
+        width: fit-content;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+      .classRoom_info {
+        position: absolute;
+        left: 50%; /* 부모 요소의 50% 위치 */
+        transform: translate(-50%, 15%);
+        background-color: #ffffff;
+        border: 2px solid #3589e4;
+        border-radius: 0.3rem;
+        width: fit-content;
+        padding: 0.3rem 0.5rem;
+        bottom: 3rem;
+        .classRoom_name {
+          font-weight: 800;
+        }
+        .classRoom_detail {
+          display: flex;
+          gap: 0.4rem;
+        }
+      }
+    }
+    .mark {
+      width: 2rem;
+      height: 2rem;
+    }
+    .building_mark {
+      fill: #ff3c00;
+    }
+    .classRoom_mark {
+      fill: #007bff;
+    }
+  }
 }
