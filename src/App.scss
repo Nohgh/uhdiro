@@ -1,9 +1,9 @@
 .main {
-  width: 100vw;
-  // height: 100dvh;
+  display: block;
+  width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-
   background-color: rgb(255, 255, 255);
+  // height: 100dvh;
 }
 @media (min-width: 440px) {
   .main {
