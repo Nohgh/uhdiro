@@ -89,14 +89,15 @@
     width: 2rem;
     height: 2rem;
     position: absolute;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    top: 1rem;
-    right: 1rem;
+    top: 0.5rem;
+    right: 0.5rem;
     z-index: 3;
+    cursor: pointer;
     box-shadow: 0 0rem 0.1rem rgba(0, 0, 0, 0.19),
       0 0.2rem 0.2rem rgba(0, 0, 0, 0.23);
     &_icon {
@@ -106,5 +107,29 @@
   }
   .Myposition:hover {
     background-color: #f2f2f2;
+  }
+  .Weather {
+    width: 6rem;
+    height: 2rem;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-right: 0.7rem;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0rem 0.1rem rgba(0, 0, 0, 0.19),
+      0 0.2rem 0.2rem rgba(0, 0, 0, 0.23);
+    border-radius: 10.4rem;
+    z-index: 3;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444444;
+    cursor: pointer;
+    .weather_icon {
+      width: 3rem;
+      height: 3rem;
+    }
   }
 }
