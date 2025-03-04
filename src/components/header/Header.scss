@@ -139,6 +139,23 @@
           }
         }
       }
+      .not_result {
+        margin-top: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        height: 100%;
+        width: 100%;
+        &-icon {
+          fill: rgb(240, 176, 0);
+          height: 3.7rem;
+          width: 3.7rem;
+          margin-bottom: 1rem;
+        }
+      }
     }
     &-storaged {
       padding: 0.7rem 0.7rem 0 0.7rem;
@@ -149,13 +166,14 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
           width: 5rem;
-          height: 1.5rem;
+          height: 1.7rem;
           border-radius: 0.3rem;
           background-color: #e1e1e1;
           color: #5a5a5a;
           margin-right: 1rem;
+          font-weight: 600;
         }
         .clicked {
           background-color: #cee6ff;
