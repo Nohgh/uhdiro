@@ -85,7 +85,7 @@
       }
     }
   }
-  .Myposition {
+  .MypositionWidget {
     width: 2rem;
     height: 2rem;
     position: absolute;
@@ -94,7 +94,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    top: 0.5rem;
+    bottom: 0.5rem;
     right: 0.5rem;
     z-index: 3;
     cursor: pointer;
@@ -108,11 +108,23 @@
   .Myposition:hover {
     background-color: #f2f2f2;
   }
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.1rem); /* 위로 살짝 이동 */
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
   .Weather {
     width: 6rem;
     height: 2rem;
     position: absolute;
-    top: 0.5rem;
+    bottom: 0.5rem;
     left: 0.5rem;
     display: flex;
     align-items: center;
@@ -126,10 +138,12 @@
     font-size: 0.9rem;
     font-weight: 600;
     color: #444444;
+
     cursor: pointer;
     .weather_icon {
       width: 3rem;
       height: 3rem;
+      animation: bounce 2.7s ease-in-out infinite;
     }
   }
 }

@@ -192,8 +192,6 @@ const Header = () => {
   //장소 클릭에 따른 장소 저장
   useEffect(() => {
     if (selectResult.selectType === "none") return;
-    console.log("너 혹시 선택했니?");
-
     const currentDate = new Date();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
@@ -304,8 +302,6 @@ const Header = () => {
             }
           });
         }
-      } else {
-        console.log("not input");
       }
     };
 
