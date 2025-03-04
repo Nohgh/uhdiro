@@ -13,6 +13,8 @@ import useResultBuildingStore from "../../store/useResultBuildingStore";
 import useResultClassRoomStore from "../../store/useResultClassRoomStore";
 import "./Header.scss";
 import useSelectStore from "../../store/useSelectStore";
+import RootModal from "../modal/root modal/RootModal";
+import useModalStateStore from "../../store/useModalStateStore";
 //interface: 선택한 결과 타입
 interface SelectResultType {
   selectType: string;
@@ -67,7 +69,6 @@ const Header = () => {
     selectType: "none",
     selectData: null,
   });
-
   const [panelMode, setPanelMode] = useState("recent");
 
   //------custom hooks------
@@ -79,6 +80,8 @@ const Header = () => {
   const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
     useResultClassRoomStore();
   const { setSelectOn } = useSelectStore();
+
+  const { isModalOpen, openModal } = useModalStateStore();
   //------func------
 
   //입력값 초기화 아이콘 클릭
@@ -523,6 +526,7 @@ const Header = () => {
       <div className="header__top">
         <svg
           className="header__top__bars"
+          onClick={openModal}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
         >
@@ -584,6 +588,7 @@ const Header = () => {
           )}
         </div>
       )}
+      {isModalOpen && <RootModal modalName="side_modal" />}
     </div>
   );
 };

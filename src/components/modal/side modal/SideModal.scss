@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../assets/fonts/Pretendard-Regular.otf");
+}
+
+.sideModal {
+  height: calc(var(--vh, 1vh) * 100);
+  width: 15.3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  font-family: "Pretendard";
+
+  padding-top: 0.7rem;
+  .close_icon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .sideModal_content {
+    width: 100%;
+    .noticeWrapper {
+      width: 100%;
+      .title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-top: 1rem;
+      }
+      .contentWrapper {
+        display: block;
+        margin-top: 0.5rem;
+        width: calc(100% - 0.6rem - 2px);
+        // height: 10rem;
+        padding: 0.3rem;
+        border-radius: 5px;
+        border: 1px solid rgb(201, 201, 201);
+        overflow: auto;
+        .content {
+          margin-bottom: 0.2rem;
+          // border-bottom: 0.3px solid rgb(207, 207, 207);
+          padding-bottom: 0.3rem;
+          display: block;
+        }
+      }
+    }
+    .inquireWrapper {
+      width: 100%;
+      margin-top: 2rem;
+      .inquire_title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .inquire_link {
+        color: #3f3f3f;
+        text-decoration: none;
+        border-bottom: 1px solid rgb(170, 170, 170);
+      }
+    }
+    .developerWrapper {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 0.9rem;
+
+      .developer_title {
+        font-weight: 600;
+        color: #6d6d6d;
+      }
+      .develper_info {
+        color: #6d6d6d;
+      }
+    }
+  }
+}
+@media (min-width: 440px) {
+  .sideModal {
+    height: calc(var(--vh, 1vh) * 100);
+    width: 20rem;
+    // position: absolute;
+    // top: 0;
+    left: calc(50% - 220px);
+    background-color: rgb(255, 255, 255);
+    margin: 0 auto;
+    font-family: "Pretendard";
+  }
+}
