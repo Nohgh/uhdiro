@@ -123,6 +123,9 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        .id33 {
+          font-size: 0.9rem;
+        }
         &-data {
           width: 80%;
           height: 100%;
@@ -204,6 +207,7 @@
                 font-weight: 500;
                 color: $grey-0;
               }
+
               &__id {
                 font-size: 0.8rem;
                 color: $grey-1;
@@ -214,6 +218,10 @@
                 .detail_block {
                   padding-right: 0.6rem;
                 }
+              }
+              .not_name {
+                color: $grey-0;
+                font-size: 1rem;
               }
             }
           }

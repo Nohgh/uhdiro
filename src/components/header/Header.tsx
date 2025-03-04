@@ -345,7 +345,11 @@ const Header = () => {
               </svg>
 
               <div className="building-data">
-                <div className="building-data__name">
+                <div
+                  className={`building-data__name ${
+                    building.buildingId === 33 ? "id33" : ""
+                  }`}
+                >
                   {building.buildingName}
                 </div>
                 <div className="building-data__id">
@@ -453,7 +457,11 @@ const Header = () => {
                   <path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z" />
                 </svg>
                 <div className="recent_place">
-                  <div className="recent_place__name">
+                  <div
+                    className={`recent_place__name ${
+                      recent.buildingId === 33 ? "id33" : ""
+                    }`}
+                  >
                     {recent.buildingName}
                   </div>
                   <div className="recent_place__id">
@@ -493,10 +501,19 @@ const Header = () => {
                 </svg>
                 <div className="recent_place classRoom_info">
                   <div className="recent_place__name">{recent.name}</div>
-                  <div className="recent_place__detail">
+                  <div
+                    className={`recent_place__detail ${
+                      recent.name ? "" : "not_name"
+                    }`}
+                  >
                     <div className="detail_block">{recent.buildingName}</div>
-                    <div className="detail_block">{recent.floor}층</div>
-                    <div className="detail_block">{recent.num}호</div>
+                    <div className="detail_block">
+                      {recent.floor > 0
+                        ? recent.floor
+                        : `지하 ${-recent.floor}`}
+                      층
+                    </div>
+                    <div className="detail_block">{recent.num}</div>
                   </div>
                 </div>
                 <svg

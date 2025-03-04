@@ -130,7 +130,7 @@ const CampusMap = () => {
                           : `지하 ${-placeData.floor}`}
                         층{placeData.num ? "" : ""}
                       </div>
-                      <div className="detail">{placeData.num}호실</div>
+                      <div className="detail">{placeData.num}</div>
                     </div>
                   </div>
                   <svg
