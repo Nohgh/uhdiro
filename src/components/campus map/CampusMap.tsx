@@ -4,6 +4,7 @@ import "./CampusMap.scss";
 import { useEffect, useRef, useState } from "react";
 import useSelectStore from "../../store/useSelectStore";
 import axios from "axios";
+import usePanelState from "../../store/usePanelState";
 
 interface RecentDataType {
   uuid: string;
@@ -58,6 +59,7 @@ const CampusMap = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { isPanelOpen } = usePanelState();
 
   const handleMyPositionClick = () => {
     if (navigator.geolocation) {
@@ -199,43 +201,47 @@ const CampusMap = () => {
               lng: Number(placeData?.lng),
             }}
           >
-            <div className="MapMarker">
-              {placeData.types === "building" ? (
-                <div className="infoWrapper">
-                  <div className="building_info">{placeData.buildingName}</div>
-                  <svg
-                    className="mark building_mark"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 384 512"
-                  >
-                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                  </svg>
-                </div>
-              ) : (
-                <div className="infoWrapper">
-                  <div className="classRoom_info">
-                    <div className="classRoom_name">{placeData.name}</div>
-                    <div className="classRoom_detail">
-                      <div className="detail">{placeData.buildingName}</div>
-                      <div className="detail">
-                        {placeData.floor > 0
-                          ? placeData.floor
-                          : `지하 ${-placeData.floor}`}
-                        층{placeData.num ? "" : ""}
-                      </div>
-                      <div className="detail">{placeData.num}</div>
+            {!isPanelOpen && (
+              <div className="MapMarker">
+                {placeData.types === "building" ? (
+                  <div className="infoWrapper">
+                    <div className="building_info">
+                      {placeData.buildingName}
                     </div>
+                    <svg
+                      className="mark building_mark"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 384 512"
+                    >
+                      <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                    </svg>
                   </div>
-                  <svg
-                    className="mark classRoom_mark"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 384 512"
-                  >
-                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                  </svg>
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div className="infoWrapper">
+                    <div className="classRoom_info">
+                      <div className="classRoom_name">{placeData.name}</div>
+                      <div className="classRoom_detail">
+                        <div className="detail">{placeData.buildingName}</div>
+                        <div className="detail">
+                          {placeData.floor > 0
+                            ? placeData.floor
+                            : `지하 ${-placeData.floor}`}
+                          층{placeData.num ? "" : ""}
+                        </div>
+                        <div className="detail">{placeData.num}</div>
+                      </div>
+                    </div>
+                    <svg
+                      className="mark classRoom_mark"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 384 512"
+                    >
+                      <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            )}
           </CustomOverlayMap>
         )}
         {myPosition && (
