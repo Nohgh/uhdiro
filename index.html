@@ -24,11 +24,25 @@
       property="og:description"
       content="한림대학교 건물을 쉽고 빠르게 찾아보세요"
     />
-    <meta property="og:image" content="/new_uhdiro.png" />
+    <meta property="og:image" content="/og_img.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="830" />
     <title>uhdiro</title>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-53Q9B76BZX"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-53Q9B76BZX");
+  </script>
   <body>
     <div id="root"></div>
     <div id="modal"></div>
