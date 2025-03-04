@@ -15,6 +15,7 @@ import "./Header.scss";
 import useSelectStore from "../../store/useSelectStore";
 import RootModal from "../modal/root modal/RootModal";
 import useModalStateStore from "../../store/useModalStateStore";
+import usePanelState from "../../store/usePanelState";
 //interface: 선택한 결과 타입
 interface SelectResultType {
   selectType: string;
@@ -82,6 +83,8 @@ const Header = () => {
   const { setSelectOn } = useSelectStore();
 
   const { isModalOpen, openModal } = useModalStateStore();
+
+  const { setPanelOpen, setPanelClose } = usePanelState();
   //------func------
 
   //입력값 초기화 아이콘 클릭
@@ -313,6 +316,11 @@ const Header = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
+
+  useEffect(() => {
+    showSearchPanel ? setPanelOpen() : setPanelClose();
+    console.log(showSearchPanel);
+  }, [showSearchPanel]);
   //Component: 검색 결과 컴포넌트
   const SearchPlaces = () => {
     if (resultBuilding?.length || resultClassRoom?.length) {
