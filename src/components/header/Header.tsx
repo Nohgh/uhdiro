@@ -566,7 +566,7 @@ const Header = () => {
         <input
           type="text"
           className="header__search-box__input"
-          placeholder="건물 이름 및 번호, 강의실 번호 및 이름 검색"
+          placeholder="건물 이름 및 번호, 강의실 이름 및 번호 검색"
           value={inputValue}
           onChange={handleInputChange}
         />
@@ -582,7 +582,7 @@ const Header = () => {
         )}
       </div>
       {showSearchPanel && (
-        <div className="search-panel" ref={searchPanel}>
+        <div className="search-panel" ref={searchPanel} style={{ zIndex: 999 }}>
           {inputValue ? (
             <div className="search-panel-resultTab">{SearchPlaces()}</div>
           ) : (

@@ -251,7 +251,11 @@ const CampusMap = () => {
           </CustomOverlayMap>
         )}
       </Map>
-      <div className="Myposition" onClick={handleMyPositionClick}>
+      <div
+        className="Myposition"
+        onClick={handleMyPositionClick}
+        style={{ zIndex: 3 }}
+      >
         <svg
           className="Myposition_icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +265,7 @@ const CampusMap = () => {
         </svg>
       </div>
       {weather && (
-        <div className="Weather">
+        <div className="Weather" style={{ zIndex: 3 }}>
           <img className="weather_icon" src={iconUrl} alt="날씨 아이콘" />
           <div>{weather.main.temp}°C</div>
         </div>
