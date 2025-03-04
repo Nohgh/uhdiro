@@ -114,13 +114,11 @@ const CampusMap = () => {
 
     if (isSelect) {
       setSelectOff();
-      console.log("isSelect이후에", isSelect);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSelect]);
 
   useEffect(() => {
-    console.log("placeData", placeData);
     if (placeData && mapRef.current) {
       const newCenter = new kakao.maps.LatLng(
         Number(placeData.lat),
@@ -136,9 +134,7 @@ const CampusMap = () => {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      console.log("새로고침 또는 창이 닫힙니다");
       setSelectOff();
-      console.log(isSelect);
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
 
@@ -165,7 +161,6 @@ const CampusMap = () => {
         );
 
         setWeather(response.data);
-        console.log("날씨 정보 입니다. ", response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           setError(
@@ -252,12 +247,12 @@ const CampusMap = () => {
         )}
       </Map>
       <div
-        className="Myposition"
+        className="MypositionWidget"
         onClick={handleMyPositionClick}
         style={{ zIndex: 3 }}
       >
         <svg
-          className="Myposition_icon"
+          className="MypositionWidget_icon"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
         >
