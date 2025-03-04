@@ -32,6 +32,33 @@ const CampusMap = () => {
   const [center, setCenter] = useState<{ lat: number; lng: number }>(() => {
     return { lat: DEFAULT_LAT, lng: DEFAULT_LNG };
   });
+  // const [isMyPositionOn, setIsMyPositionOn] = useState(false);
+
+  const [myPosition, setMyPosition] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+
+  const handleMyPositionClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setMyPosition({ lat: latitude, lng: longitude });
+
+          if (mapRef.current) {
+            const newCenter = new kakao.maps.LatLng(latitude, longitude);
+            mapRef.current.panTo(newCenter);
+          }
+        },
+        (error) => {
+          console.error("위치 정보를 가져올 수 없습니다.", error);
+        }
+      );
+    } else {
+      console.error("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+    }
+  };
 
   useEffect(() => {
     // 맵이 로드된 후 강제로 크기 재계산
@@ -87,10 +114,12 @@ const CampusMap = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // useEffect(() => {}, [isMyPositionOn]);
   return (
-    <>
+    <div className="MapWrapper">
       <Map
         id="map"
         className="map"
@@ -145,8 +174,24 @@ const CampusMap = () => {
             </div>
           </CustomOverlayMap>
         )}
+        {myPosition && (
+          <CustomOverlayMap position={myPosition}>
+            <div className="MyPoitionWrapper">
+              <div className="MyPoition"></div>
+            </div>
+          </CustomOverlayMap>
+        )}
       </Map>
-    </>
+      <div className="Myposition" onClick={handleMyPositionClick}>
+        <svg
+          className="Myposition_icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
+          <path d="M256 0c17.7 0 32 14.3 32 32l0 34.7C368.4 80.1 431.9 143.6 445.3 224l34.7 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-34.7 0C431.9 368.4 368.4 431.9 288 445.3l0 34.7c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-34.7C143.6 431.9 80.1 368.4 66.7 288L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l34.7 0C80.1 143.6 143.6 80.1 224 66.7L224 32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z" />
+        </svg>
+      </div>
+    </div>
   );
 };
 
