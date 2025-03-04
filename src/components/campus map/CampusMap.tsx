@@ -73,6 +73,17 @@ const CampusMap = () => {
         },
         (error) => {
           console.error("위치 정보를 가져올 수 없습니다.", error);
+          if (error.code === 1) {
+            alert(
+              "위치 권한이 거부되었습니다. 설정에서 위치 접근을 허용해주세요."
+            );
+          } else if (error.code === 2) {
+            alert(
+              "위치를 가져올 수 없습니다. GPS 신호가 약하거나 브라우저가 차단했을 수 있습니다."
+            );
+          } else if (error.code === 3) {
+            alert("위치 요청이 시간 초과되었습니다. 다시 시도해주세요.");
+          }
         }
       );
     } else {
