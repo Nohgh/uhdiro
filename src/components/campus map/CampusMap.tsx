@@ -4,6 +4,7 @@ import "./CampusMap.scss";
 import { useEffect, useRef, useState } from "react";
 import useSelectStore from "../../store/useSelectStore";
 import axios from "axios";
+import useSearchPanelStore from "../../store/useSearchPanelStore";
 
 interface RecentDataType {
   uuid: string;
@@ -58,7 +59,7 @@ const CampusMap = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const { showSearchPanel } = useSearchPanelStore();
   const handleMyPositionClick = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -251,20 +252,22 @@ const CampusMap = () => {
           </CustomOverlayMap>
         )}
       </Map>
-      <div
-        className="Myposition"
-        onClick={handleMyPositionClick}
-        style={{ zIndex: 3 }}
-      >
-        <svg
-          className="Myposition_icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
+      {!showSearchPanel && (
+        <div
+          className="Myposition"
+          onClick={handleMyPositionClick}
+          style={{ zIndex: 3 }}
         >
-          <path d="M256 0c17.7 0 32 14.3 32 32l0 34.7C368.4 80.1 431.9 143.6 445.3 224l34.7 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-34.7 0C431.9 368.4 368.4 431.9 288 445.3l0 34.7c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-34.7C143.6 431.9 80.1 368.4 66.7 288L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l34.7 0C80.1 143.6 143.6 80.1 224 66.7L224 32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z" />
-        </svg>
-      </div>
-      {weather && (
+          <svg
+            className="Myposition_icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+          >
+            <path d="M256 0c17.7 0 32 14.3 32 32l0 34.7C368.4 80.1 431.9 143.6 445.3 224l34.7 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-34.7 0C431.9 368.4 368.4 431.9 288 445.3l0 34.7c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-34.7C143.6 431.9 80.1 368.4 66.7 288L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l34.7 0C80.1 143.6 143.6 80.1 224 66.7L224 32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z" />
+          </svg>
+        </div>
+      )}
+      {!showSearchPanel && weather && (
         <div className="Weather" style={{ zIndex: 3 }}>
           <img className="weather_icon" src={iconUrl} alt="날씨 아이콘" />
           <div>{weather.main.temp}°C</div>

@@ -15,6 +15,7 @@ import "./Header.scss";
 import useSelectStore from "../../store/useSelectStore";
 import RootModal from "../modal/root modal/RootModal";
 import useModalStateStore from "../../store/useModalStateStore";
+import useSearchPanelStore from "../../store/useSearchPanelStore";
 //interface: 선택한 결과 타입
 interface SelectResultType {
   selectType: string;
@@ -57,8 +58,9 @@ const Header = () => {
   const [inputValue, setInputValue] = useState("");
 
   //검색결과창 표시 여부
-  const [showSearchPanel, setShowSearchPanel] = useState(false);
-
+  // const [showSearchPanel, setShowSearchPanel] = useState(false);
+  const { showSearchPanel, showSearchPanelOn, showSearchPanelOff } =
+    useSearchPanelStore();
   //localstorage에 저장된 최근 기록
   const [recentDataList, setRecentDataList] = useState<RecentDataType[]>(() => {
     return JSON.parse(window.localStorage.getItem("recent") || "[]");
@@ -87,7 +89,7 @@ const Header = () => {
   //입력값 초기화 아이콘 클릭
   const clickXmark = () => {
     setInputValue("");
-    setShowSearchPanel(false);
+    showSearchPanelOff();
   };
 
   //입력값 변화 관리
@@ -262,9 +264,9 @@ const Header = () => {
         !searchBox.current?.contains(target) &&
         !searchPanel.current?.contains(target)
       ) {
-        setShowSearchPanel(false);
+        showSearchPanelOff();
       } else {
-        setShowSearchPanel(true);
+        showSearchPanelOn();
       }
     };
     document.addEventListener("mousedown", handleClickSearchBox);
@@ -332,7 +334,7 @@ const Header = () => {
                   selectData: building,
                 });
                 setSelectOn();
-                setShowSearchPanel(false);
+                showSearchPanelOff();
               }}
             >
               {/* 선택한 빌딩과 강의실 정보는 campus map으로 전달되어야 한다.-> 전역 상태 관리 */}
@@ -375,7 +377,7 @@ const Header = () => {
                   selectData: classRoom,
                 });
                 setSelectOn();
-                setShowSearchPanel(false);
+                showSearchPanelOff();
               }}
             >
               <svg
@@ -446,7 +448,7 @@ const Header = () => {
                     selectData: recent,
                   });
                   setSelectOn();
-                  setShowSearchPanel(false);
+                  showSearchPanelOff();
                 }}
               >
                 <svg
@@ -489,7 +491,7 @@ const Header = () => {
                     selectData: recent,
                   });
                   setSelectOn();
-                  setShowSearchPanel(false);
+                  showSearchPanelOff();
                 }}
               >
                 <svg
