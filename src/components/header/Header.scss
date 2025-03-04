@@ -201,7 +201,9 @@
               display: flex;
               align-items: center;
               justify-content: space-between;
-
+              .id33 {
+                font-size: 0.9rem;
+              }
               color: $grey-0;
               &__name {
                 font-weight: 500;
