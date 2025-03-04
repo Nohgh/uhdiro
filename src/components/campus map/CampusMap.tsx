@@ -234,7 +234,7 @@ const CampusMap = () => {
         )}
         {myPosition && (
           <CustomOverlayMap position={myPosition}>
-            <div className="MyPoition">
+            <div className="MyPoitionWrapper">
               <div className="MyPoition"></div>
             </div>
           </CustomOverlayMap>
