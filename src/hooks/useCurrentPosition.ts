@@ -7,7 +7,7 @@ interface MapState {
   errMsg: string | null;
   isLoading: boolean;
 }
-/**지도에서 현재 위치를 반환합니다. */
+
 const useCurrentPosition = () => {
   const LAT = 37.88635830852239;
   const LNG = 127.73791244339736;
@@ -21,7 +21,6 @@ const useCurrentPosition = () => {
   });
   useEffect(() => {
     if (navigator.geolocation) {
-      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setPosition((prev) => ({
@@ -42,7 +41,6 @@ const useCurrentPosition = () => {
         }
       );
     } else {
-      // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
       setPosition((prev) => ({
         ...prev,
         errMsg: "geolocation을 사용할수 없어요..",
