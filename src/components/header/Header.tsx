@@ -70,7 +70,6 @@ const Header = () => {
     selectType: "none",
     selectData: null,
   });
-  const [panelMode, setPanelMode] = useState("recent");
 
   //------custom hooks------
   //건물 검색 결과
@@ -250,8 +249,6 @@ const Header = () => {
       window.localStorage.setItem("recent", JSON.stringify(updatedList));
       return updatedList;
     });
-
-    // setSelectedResult({ selectType: "none", selectData: null });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectResult]);
 
@@ -550,9 +547,7 @@ const Header = () => {
       </>
     );
   };
-  const SavedPlace = () => {
-    return <div>저장된 장소입니다.</div>;
-  };
+
   return (
     <div className="header">
       <div className="header__top">
@@ -592,30 +587,9 @@ const Header = () => {
           ) : (
             <div className="search-panel-storaged">
               <div className="search-panel-storaged-navigation">
-                <div
-                  className={`${
-                    panelMode === "recent" ? "clicked" : ""
-                  } panelBtn`}
-                  onClick={() => setPanelMode("recent")}
-                >
-                  최근기록
-                </div>
-                {/* <div
-                  className={`${
-                    panelMode === "saved" ? "clicked" : ""
-                  } panelBtn`}
-                  onClick={() => setPanelMode("saved")}
-                >
-                  내장소
-                </div> */}
+                <div className={`clicked panelBtn`}>최근기록</div>
               </div>
-              {panelMode === "recent" ? (
-                <div className="search-panel-storaged-place">
-                  {RecentPlace()}
-                </div>
-              ) : (
-                <div className="saved-place">{SavedPlace()}</div>
-              )}
+              <div className="search-panel-storaged-place">{RecentPlace()}</div>
             </div>
           )}
         </div>
