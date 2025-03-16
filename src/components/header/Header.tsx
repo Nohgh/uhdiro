@@ -318,11 +318,12 @@ const Header = () => {
     showSearchPanel ? setPanelOpen() : setPanelClose();
     console.log(showSearchPanel);
   }, [showSearchPanel]);
+
   //Component: 검색 결과 컴포넌트
   const SearchPlaces = () => {
     if (buildingResult?.length || classRoomResult?.length) {
       return (
-        <>
+        <div className="search-panel-resultTab">
           {buildingResult?.map((building) => (
             <div
               className="resultBlock building"
@@ -412,7 +413,7 @@ const Header = () => {
               </svg>
             </div>
           ))}
-        </>
+        </div>
       );
     }
 
@@ -432,7 +433,7 @@ const Header = () => {
   };
   const RecentPlace = () => {
     return (
-      <>
+      <div className="search-panel-storaged-place">
         {recentDataList?.map((recent: RecentDataType) => (
           <div
             className="search-panel-storaged-place-container"
@@ -544,7 +545,7 @@ const Header = () => {
             <div>최근 기록이 비어있습니다.</div>
           </div>
         )}
-      </>
+      </div>
     );
   };
 
@@ -580,24 +581,22 @@ const Header = () => {
           </svg>
         )}
       </div>
+
       {showSearchPanel && (
         <div className="search-panel" ref={searchPanel} style={{ zIndex: 999 }}>
           {inputValue ? (
-            <div className="search-panel-resultTab">
-              <SearchPlaces />
-            </div>
+            <SearchPlaces />
           ) : (
             <div className="search-panel-storaged">
               <div className="search-panel-storaged-navigation">
-                <div className={`clicked panelBtn`}>최근기록</div>
+                <div className="clicked panelBtn">최근기록</div>
               </div>
-              <div className="search-panel-storaged-place">
-                <RecentPlace />
-              </div>
+              <RecentPlace />
             </div>
           )}
         </div>
       )}
+
       {isModalOpen && <Modal name="side_modal" />}
     </div>
   );

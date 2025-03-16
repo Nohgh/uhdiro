@@ -134,6 +134,7 @@ const CampusMap = () => {
     }
   }, [placeData]);
 
+  //page떠나는 시점에 실행되는 이벤트 감지
   useEffect(() => {
     const handleBeforeUnload = () => {
       setSelectOff();

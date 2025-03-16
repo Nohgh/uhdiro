@@ -145,22 +145,22 @@
           }
         }
       }
-      .not_result {
-        margin-top: 5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        font-weight: 700;
-        height: 100%;
-        width: 100%;
-        &-icon {
-          fill: rgb(240, 176, 0);
-          height: 3.7rem;
-          width: 3.7rem;
-          margin-bottom: 1rem;
-        }
+    }
+    .not_result {
+      // margin-top: 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      height: 100%;
+      width: 100%;
+      &-icon {
+        fill: rgb(240, 176, 0);
+        height: 3.7rem;
+        width: 3.7rem;
+        margin-bottom: 1rem;
       }
     }
     &-storaged {
