@@ -9,11 +9,11 @@ import {
   Room,
 } from "../../interfaces/place";
 import useDebounce from "../../hooks/useDebounce";
-import useResultBuildingStore from "../../store/useResultBuildingStore";
-import useResultClassRoomStore from "../../store/useResultClassRoomStore";
+import useBuilidngResultStore from "../../store/useBuildingResultStore";
+import useClassRoomResultStore from "../../store/useClassRoomResultStore";
 import "./Header.scss";
 import useSelectStore from "../../store/useSelectStore";
-import RootModal from "../modal/root modal/RootModal";
+import Modal from "../modal/root modal/Modal";
 import useModalStateStore from "../../store/useModalStateStore";
 import usePanelState from "../../store/usePanelState";
 //interface: 선택한 결과 타입
@@ -73,12 +73,12 @@ const Header = () => {
 
   //------custom hooks------
   //건물 검색 결과
-  const { resultBuilding, setResultBuilding, clearResultBuilding } =
-    useResultBuildingStore();
+  const { buildingResult, setBuildingResult, clearBuildingResult } =
+    useBuilidngResultStore();
 
   //강의실 검색 결과
-  const { resultClassRoom, setResultClassRoom, clearResultClassRoom } =
-    useResultClassRoomStore();
+  const { classRoomResult, setClassRoomResult, clearClassRoomResult } =
+    useClassRoomResultStore();
   const { setSelectOn } = useSelectStore();
 
   const { isModalOpen, openModal } = useModalStateStore();
@@ -288,17 +288,17 @@ const Header = () => {
         );
         //건물 결과 세팅
         if (buildingResults && buildingResults.length > 0) {
-          setResultBuilding(buildingResults);
+          setBuildingResult(buildingResults);
         }
 
         //강의실 검색
         const classroomResults = findClassrooms(debounceInputValue);
         if (classroomResults.length > 0) {
-          const resultClassRoomSet = new Set(resultClassRoom);
+          const resultClassRoomSet = new Set(classRoomResult);
           classroomResults.forEach((item) => {
             if (!resultClassRoomSet.has(item)) {
               //강의실 결과 세팅
-              setResultClassRoom(classroomResults);
+              setClassRoomResult(classroomResults);
             }
           });
         }
@@ -308,8 +308,8 @@ const Header = () => {
     handleSearch();
 
     return () => {
-      clearResultClassRoom();
-      clearResultBuilding();
+      clearClassRoomResult();
+      clearBuildingResult();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceInputValue]);
@@ -318,12 +318,13 @@ const Header = () => {
     showSearchPanel ? setPanelOpen() : setPanelClose();
     console.log(showSearchPanel);
   }, [showSearchPanel]);
+
   //Component: 검색 결과 컴포넌트
   const SearchPlaces = () => {
-    if (resultBuilding?.length || resultClassRoom?.length) {
+    if (buildingResult?.length || classRoomResult?.length) {
       return (
-        <>
-          {resultBuilding?.map((building) => (
+        <div className="search-panel-resultTab">
+          {buildingResult?.map((building) => (
             <div
               className="resultBlock building"
               key={building.buildingId}
@@ -366,7 +367,7 @@ const Header = () => {
               </svg>
             </div>
           ))}
-          {resultClassRoom?.map((classRoom) => (
+          {classRoomResult?.map((classRoom) => (
             <div
               className="resultBlock classRoom"
               key={uuidv4()}
@@ -412,7 +413,7 @@ const Header = () => {
               </svg>
             </div>
           ))}
-        </>
+        </div>
       );
     }
 
@@ -432,7 +433,7 @@ const Header = () => {
   };
   const RecentPlace = () => {
     return (
-      <>
+      <div className="search-panel-storaged-place">
         {recentDataList?.map((recent: RecentDataType) => (
           <div
             className="search-panel-storaged-place-container"
@@ -544,7 +545,7 @@ const Header = () => {
             <div>최근 기록이 비어있습니다.</div>
           </div>
         )}
-      </>
+      </div>
     );
   };
 
@@ -580,21 +581,23 @@ const Header = () => {
           </svg>
         )}
       </div>
+
       {showSearchPanel && (
         <div className="search-panel" ref={searchPanel} style={{ zIndex: 999 }}>
           {inputValue ? (
-            <div className="search-panel-resultTab">{SearchPlaces()}</div>
+            <SearchPlaces />
           ) : (
             <div className="search-panel-storaged">
               <div className="search-panel-storaged-navigation">
-                <div className={`clicked panelBtn`}>최근기록</div>
+                <div className="clicked panelBtn">최근기록</div>
               </div>
-              <div className="search-panel-storaged-place">{RecentPlace()}</div>
+              <RecentPlace />
             </div>
           )}
         </div>
       )}
-      {isModalOpen && <RootModal modalName="side_modal" />}
+
+      {isModalOpen && <Modal name="side_modal" />}
     </div>
   );
 };
