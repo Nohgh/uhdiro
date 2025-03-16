@@ -13,7 +13,7 @@ import useResultBuildingStore from "../../store/useResultBuildingStore";
 import useResultClassRoomStore from "../../store/useResultClassRoomStore";
 import "./Header.scss";
 import useSelectStore from "../../store/useSelectStore";
-import RootModal from "../modal/root modal/RootModal";
+import Modal from "../modal/root modal/Modal";
 import useModalStateStore from "../../store/useModalStateStore";
 import usePanelState from "../../store/usePanelState";
 //interface: 선택한 결과 타입
@@ -594,7 +594,7 @@ const Header = () => {
           )}
         </div>
       )}
-      {isModalOpen && <RootModal modalName="side_modal" />}
+      {isModalOpen && <Modal name="side_modal" />}
     </div>
   );
 };
